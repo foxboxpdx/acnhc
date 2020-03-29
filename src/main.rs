@@ -9,11 +9,11 @@ use rocket_contrib::databases::rusqlite;
 use acnhc::*;
 
 // Tie a type to database
-#[database("my_db")]
-struct MyDatabase(rusqlite::Connection);
+//#[database("my_db")]
+//struct MyDatabase(rusqlite::Connection);
 
 #[get("/")]
-fn index(conn: MyDatabase) -> Template {
+fn index() -> Template {
     let context = CountContext {
         furncount: 0, furnvarcount: 0, clothcount: 0, clothvarcount: 0,
         fishcount: 0, bugcount: 0, fossilcount: 0, flowercount: 0,
@@ -27,7 +27,7 @@ fn rocket() -> rocket::Rocket {
         .mount("/", routes![index])
         .mount("/", StaticFiles::from("public"))
         .attach(Template::fairing())
-        .attach(MyDatabase::fairing())
+        //.attach(MyDatabase::fairing())
 }
 
 fn main() {
