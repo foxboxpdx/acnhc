@@ -1,0 +1,20 @@
+[package]
+name = "acnhc"
+version = "0.0.1"
+authors = ["Fox Box <foxboxpdx@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+rocket = "0.4.3"
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
+
+[dependencies.rusqlite]
+version = "0.21.0"
+features = ["bundled"]
+
+[dependencies.rocket_contrib]
+version = "0.4.3"
+default-features = false
+features = ["tera_templates", "server", "sqlite_pool"]
