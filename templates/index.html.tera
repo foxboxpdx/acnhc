@@ -9,10 +9,10 @@
             </div>
             <div class="panel-body" id="metadata" style="display: block;">
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-6">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<h3 class="panel-title">Furniture and Clothing</h3>
+								<h3 class="panel-title">Items</h3>
 							</div>
 							<div class="panel-body">
 								<div class="row">
@@ -26,26 +26,34 @@
 								<div class="row">
 									<div class="col-md-7">
 										<h3>
-											Furn. Variants:
-										</h3>
-									</div>
-									<div class="col-md-5"><h3>{{ furnvarcount }}</h3></div>
-								</div>
-								<div class="row">
-									<div class="col-md-7">
-										<h3>
 											Clothing:
 										</h3>
 									</div>
 									<div class="col-md-5"><h3>{{ clothcount }}</h3></div>
-								</div>								
+								</div>
+								<div class="row">
+									<div class="col-md-7">
+										<h3>
+											Recipes:
+										</h3>
+									</div>
+									<div class="col-md-5"><h3>{{ recipecount }}</h3></div>
+								</div>
+                                                                <div class="row">
+                                                                        <div class="col-md-7">
+                                                                                <h3>
+                                                                                        Items:
+                                                                                </h3>
+                                                                        </div>
+                                                                        <div class="col-md-5"><h3>{{ itemcount }}</h3></div>
+                                                                </div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-6">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<h3 class="panel-title">Creatures</h3>
+								<h3 class="panel-title">Creatures, Etc.</h3>
 							</div>
 							<div class="panel-body">
 								<div class="row">
@@ -72,39 +80,14 @@
 									</div>
 									<div class="col-md-5"><h3>{{ fossilcount }}</h3></div>
 								</div>																
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h3 class="panel-title">Misc</h3>
-							</div>
-							<div class="panel-body">
-								<div class="row">
-									<div class="col-md-7">
-										<h3>
-											Flowers:
-										</h3>
-									</div>
-									<div class="col-md-5"><h3>{{ flowercount }}</h3></div>
-								</div>								
-								<div class="row">
-									<div class="col-md-7">
-										<h3>
-											Recipes:
-										</h3>
-									</div>
-									<div class="col-md-5"><h3>{{ recipecount }}</h3></div>
-								</div>
-								<div class="row">
-									<div class="col-md-7">
-										<h3>
-											Items:
-										</h3>
-									</div>
-									<div class="col-md-5"><h3>{{ itemcount }}</h3></div>
-								</div>																	
+                                                                <div class="row">
+                                                                        <div class="col-md-7">
+                                                                                <h3>
+                                                                                        Flowers:
+                                                                                </h3>
+                                                                        </div>
+                                                                        <div class="col-md-5"><h3>{{ flowercount }}</h3></div>
+                                                                </div>
 							</div>
 						</div>
 					</div>

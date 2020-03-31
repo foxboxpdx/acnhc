@@ -9,9 +9,7 @@ use rocket_contrib::databases::rusqlite;
 #[derive(Serialize)]
 pub struct CountContext {
     pub furncount: i64,
-    pub furnvarcount: i64,
     pub clothcount: i64,
-    pub clothvarcount: i64,
     pub fishcount: i64,
     pub bugcount: i64,
     pub fossilcount: i64,
