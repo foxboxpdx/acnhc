@@ -1,0 +1,4 @@
+## Put Fish In Here.  Separate fields with colons!
+## Name:River/Sea/Rivermouth:High elevation?:Rain?:Months:Hours:Sell price
+## Example:
+## Sea Bass:Sea:No:No:JFMAMJJASOND:00:00-23:00:500

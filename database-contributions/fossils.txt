@@ -1,0 +1,4 @@
+## Put Fossils In Here.  Separate fields with colons!
+## Name:Sell price
+## Example:
+## Diplo Head:1250

@@ -1,0 +1,4 @@
+## Put Bugs In Here.  Separate fields with colons!
+## Name:Rain?:Stump/Rock/Tree?:Special notes:Months:Hours:Sell price
+## Example:
+## Moth:No:n/a:n/a:none:JFMAMJJASOND:2100-0500:500

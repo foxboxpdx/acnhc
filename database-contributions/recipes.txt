@@ -1,0 +1,4 @@
+## Put Recipes In Here.  Separate fields with colons!
+## Name:Sell price
+## Example:
+## Bamboo Wall:250
