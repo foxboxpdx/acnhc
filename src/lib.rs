@@ -5,6 +5,15 @@
 extern crate rocket_contrib;
 use rocket_contrib::databases::rusqlite;
 
+pub mod bug;
+pub mod clothing;
+pub mod fish;
+pub mod flower;
+pub mod fossil;
+pub mod furniture;
+pub mod item;
+pub mod recipe;
+
 // Main totals page
 #[derive(Serialize)]
 pub struct CountContext {

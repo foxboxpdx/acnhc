@@ -10,8 +10,8 @@ use rocket_contrib::databases::rusqlite;
 use acnhc::*;
 
 // Tie a type to database
-//#[database("my_db")]
-//struct MyDatabase(rusqlite::Connection);
+#[database("sqlite_db")]
+struct MyDatabase(rusqlite::Connection);
 
 #[derive(Serialize)]
 struct Context {
@@ -86,7 +86,7 @@ fn rocket() -> rocket::Rocket {
         .mount("/", routes![index])
         .mount("/", StaticFiles::from("public"))
         .attach(Template::fairing())
-        //.attach(MyDatabase::fairing())
+        .attach(MyDatabase::fairing())
 }
 
 fn main() {
