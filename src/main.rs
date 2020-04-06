@@ -19,7 +19,7 @@ struct Context {
 }
 
 #[get("/")]
-fn index() -> Template {
+fn index(conn: MyDatabase) -> Template {
     let context = CountContext {
         furncount: 0, clothcount: 0, fishcount: 0, bugcount: 0, 
         fossilcount: 0, flowercount: 0, recipecount: 0, itemcount: 0 };
@@ -28,55 +28,55 @@ fn index() -> Template {
 }
 
 #[get("/furniture")]
-fn furniture() -> Template {
+fn furniture(conn: MyDatabase) -> Template {
     let context = Context { foo: 0 };
     Template::render("furniture", &context)
 }
 
 #[get("/clothing")]
-fn clothing() -> Template {
+fn clothing(conn: MyDatabase) -> Template {
     let context = Context { foo: 0 };
     Template::render("clothing", &context)
 }
 
 #[get("/wallfloors")]
-fn wallfloors() -> Template {
+fn wallfloors(conn: MyDatabase) -> Template {
     let context = Context { foo: 0 };
     Template::render("wallfloor", &context)
 }
 
 #[get("/fish")]
-fn fish() -> Template {
+fn fish(conn: MyDatabase) -> Template {
     let context = Context { foo: 0 };
     Template::render("fish", &context)
 }
 
 #[get("/bugs")]
-fn bugs() -> Template {
+fn bugs(conn: MyDatabase) -> Template {
     let context = Context { foo: 0 };
     Template::render("bugs", &context)
 }
 
 #[get("/fossils")]
-fn fossils() -> Template {
+fn fossils(conn: MyDatabase) -> Template {
     let context = Context { foo: 0 };
     Template::render("fossils", &context)
 }
 
 #[get("/flowers")]
-fn flowers() -> Template {
+fn flowers(conn: MyDatabase) -> Template {
     let context = Context { foo: 0 };
     Template::render("flowers", &context)
 }
 
 #[get("/items")]
-fn items() -> Template {
+fn items(conn: MyDatabase) -> Template {
     let context = Context { foo: 0 };
     Template::render("items", &context)
 }
 
 #[get("/recipes")]
-fn recipes() -> Template {
+fn recipes(conn: MyDatabase) -> Template {
     let context = Context { foo: 0 };
     Template::render("recipes", &context)
 }
