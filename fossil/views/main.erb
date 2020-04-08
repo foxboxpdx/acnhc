@@ -1,0 +1,25 @@
+
+<div class="container">
+    <div class="row">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h1 class="panel-title">User <%=username%>'s Fossils</h1>
+            </div>
+            <div class="panel-body" id="metadata" style="display: block;">
+              <% fossils.each do |fossil| %>
+                <div class="row">
+                 <div class="col-md-10">
+                  <h3><%=fossil.name%></h3>
+                 </div>
+                 <div class="col-md-1">
+                  <h3><% if owned[fossil.id] %>X<% else %>-<% end %></h3>
+                 </div>
+                 <div class="col-md-1">
+                  <h3><% if extra[fossil.id] %>X<% else %>-<% end %></h3>
+                 </div>
+               </div>
+             <% end %>
+            </div>
+        </div>
+    </div>
+</div>
