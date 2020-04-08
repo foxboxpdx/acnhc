@@ -18,16 +18,26 @@ class FossilMajig < Sinatra::Base
   get '/' do
     redirect '/login' if needs_auth
     fossils = Fossil.all
-    userdata = Site.username(session[:user_id])
-    username = userdata.username
-    owned = binary_to_array(userdata.owned)
-    extra = binary_to_array(userdata.extra)
-
-    erb :main, :locals => { :fossils => fossils, :username => username, :owned => owned, :extra => extra }
+    userdata = User.first username: session[:user_id]
+    if userdata.nil?
+      erb :login, :locals => { :nouser => true }
+    else
+      username = userdata.username
+      owned = binary_to_array(userdata.owned)
+      erb :main, :locals => { :fossils => fossils, :username => username, :owned => owned, :raw => userdata.owned }
+    end
   end
 
   get '/login' do
-    erb :login
+    erb :login, :locals => { :nouser => false }
+  end
+
+  post '/savedata' do
+    output = params.values.join('')
+    userdata = User.first username: session[:user_id]
+    userdata.owned = output
+    userdata.save
+    redirect '/'
   end
 
   post '/newuser' do
@@ -55,7 +65,7 @@ class FossilMajig < Sinatra::Base
         foo = "0" * 73
         retval = foo.split(//)
     end
-    retval
+    retval.unshift("0")
   end
 
   def array_to_binary(arr)

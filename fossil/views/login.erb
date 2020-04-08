@@ -5,10 +5,11 @@
         <h2 class="panel-title">Login</h2>
       </div>
       <div class="panel-body">
-        Enter your UUID below to proceed or press the 'NEW USER' button<br/>
+        Enter your UUID below to proceed or press the 'NEW USER' button to generate one for you!<br/>
         <br/>
         <form action='/loggedin' method='POST'>
-        <input type='text' name='user_id' />
+        <% if nouser.eql?(true) %>Sorry, can't find that username!<br/><% end %>
+        <input type='text' name='user_id' size='50' />
         <button type="button" class="btn btn-sm btn-primary" onClick="submit();">Login</button>
         </form>
         <br/>
