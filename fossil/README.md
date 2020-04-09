@@ -1,4 +1,3 @@
-# Fossil-ma-jig
+# Fossilmajig - MOVED!
 
-A quick-and-dirty attempt at some sort of fossil sharing database front-end
-
+Moved to https://github.com/foxboxpdx/fossilmajig
