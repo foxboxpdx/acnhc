@@ -4,5 +4,4 @@ source 'https://rubygems.org' do
 	gem 'sinatra', '~>2'
         gem 'dm-sqlite-adapter', '~>1.2'
         gem 'dm-aggregates', '~>1.2'
-        gem 'ruby-saml', '~>1.11'
 end

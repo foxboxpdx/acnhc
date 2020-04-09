@@ -1,9 +1,13 @@
 require 'sinatra/base'
+require 'sinatra/reloader'
 require 'data_mapper'
 require 'securerandom'
 require_relative 'db'
 
 class FossilMajig < Sinatra::Base
+  register Sinatra::Reloader
+
+  VERSION = "0.6.9 (Nice)"
 
   set :root, File.dirname(__FILE__)
 
@@ -24,7 +28,8 @@ class FossilMajig < Sinatra::Base
     else
       username = userdata.username
       owned = binary_to_array(userdata.owned)
-      erb :main, :locals => { :fossils => fossils, :username => username, :owned => owned, :raw => userdata.owned }
+      session[:alias] = userdata.alias
+      erb :main, :locals => { :fossils => fossils, :username => username, :owned => owned }
     end
   end
 
@@ -49,6 +54,40 @@ class FossilMajig < Sinatra::Base
     redirect '/'
   end
 
+  get '/dologin/:userid' do
+    session[:user_id] = params["userid"]
+    redirect '/'
+  end
+
+  get '/alias' do
+    erb :alias
+  end
+
+  post '/changealias' do
+    nick = params["alias"]
+    userdata = User.first username: session[:user_id]
+    userdata.alias = nick
+    userdata.save
+    redirect '/'
+  end
+
+  get '/selfreport' do
+    fossils = Fossil.all
+    userdata = User.first username: session[:user_id]
+    if userdata.nil?
+      erb :login, :locals => { :nouser => true }
+    else
+      username = userdata.username
+      owned = binary_to_array(userdata.owned)
+      session[:alias] = userdata.alias
+      erb :selfreport, :locals => { :fossils => fossils, :username => username, :owned => owned }
+    end
+  end
+
+  get '/allreport' do
+    "This will generate a report of all users' missing fossils"
+  end
+    
   post '/loggedin' do
     session[:user_id] = params["user_id"]
     redirect '/'

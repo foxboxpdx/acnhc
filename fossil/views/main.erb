@@ -1,9 +1,21 @@
-
+<style>
+div.row { 
+  border: 1px solid;
+  border-bottom: 0px;
+}
+.container div.row:last-child {
+  border-bottom: 1px solid;
+}
+</style>
 <div class="container">
     <div class="row">
         <div class="panel panel-info">
             <div class="panel-heading">
+              <% if session[:alias].eql?('0') %>
                 <h1 class="panel-title">User <%=username%>'s Fossils</h1>
+              <% else %>
+                <h1 class="panel-title"><%=session[:alias]%>'s Fossils</h1>
+              <% end %>
             </div>
             <div class="panel-body" id="metadata" style="display: block;">
             <form action="/savedata" method="POST">

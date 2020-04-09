@@ -8,6 +8,7 @@ class User
   property :username, String, :length=>50, :unique=>true, :required=>true
   property :owned, String, :length=>73, :required=>true
   property :extra, String, :length=>73, :required=>true
+  property :alias, String, :length=>50, :default=>'0'
 end
 
 class Fossil
