@@ -7,7 +7,7 @@ require_relative 'db'
 class FossilMajig < Sinatra::Base
   register Sinatra::Reloader
 
-  VERSION = "0.6.9 (Nice)"
+  VERSION = "0.7.203"
 
   set :root, File.dirname(__FILE__)
 
@@ -85,7 +85,18 @@ class FossilMajig < Sinatra::Base
   end
 
   get '/allreport' do
-    "This will generate a report of all users' missing fossils"
+    fossils = Fossil.all
+    users = User.all
+    userhash = Hash.new()
+    users.each do |u|
+      if u.alias.eql?("0")
+        n = u.username[0,7]
+        userhash[n] = binary_to_array(u.owned)
+      else
+        userhash[u.alias] = binary_to_array(u.owned)
+      end
+    end
+    erb :allreport, :locals => { :fossils => fossils, :users => userhash }
   end
     
   post '/loggedin' do
