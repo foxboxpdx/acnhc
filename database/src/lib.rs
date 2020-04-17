@@ -46,4 +46,44 @@ pub fn create_user<'a>(conn: &SqliteConnection, n: &'a str, a: &'a str) -> usize
         .expect("Error saving new user")
 }
 
+pub fn create_recipe<'a>(conn: &SqliteConnection, name: &'a str) -> usize {
+    use schema::recipes;
+
+    let new_recipe = NewRecipe {
+        name: name
+    };
+
+    diesel::insert_into(recipes::table)
+        .values(&new_recipe)
+        .execute(conn)
+        .expect("Error saving new recipe")
+}
+
+pub fn create_ownedfossil(conn: &SqliteConnection, u: i32, f: i32) -> usize {
+    use schema::ownedfossils;
+
+    let new_of = NewOwnedfossil {
+        user_id: u,
+        fossil_id: f
+    };
+
+    diesel::insert_into(ownedfossils::table)
+        .values(&new_of)
+        .execute(conn)
+        .expect("Error saving owned fossil")
+}
+
+pub fn create_ownedrecipe(conn: &SqliteConnection, u: i32, r: i32) -> usize {
+    use schema::ownedrecipes;
+
+    let new_or = NewOwnedrecipe {
+        user_id: u,
+        recipe_id: r
+    };
+
+    diesel::insert_into(ownedrecipes::table)
+        .values(&new_or)
+        .execute(conn)
+        .expect("Error saving owned recipe")
+}
 
