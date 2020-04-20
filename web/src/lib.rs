@@ -3,84 +3,104 @@
 
 #[macro_use] extern crate serde_derive;
 extern crate rocket_contrib;
-use rocket_contrib::databases::rusqlite;
 
-pub mod types;
-use crate::types::*;
+// Form structs
 
-// Main totals page
-#[derive(Serialize)]
-pub struct CountContext {
-    pub furncount: i64,
-    pub clothcount: i64,
-    pub fishcount: i64,
-    pub bugcount: i64,
-    pub fossilcount: i64,
-    pub flowercount: i64,
-    pub recipecount: i64,
-    pub itemcount: i64
+// Login struct
+#[derive(FromForm)]
+pub struct Userid {
+    pub id: String,
 }
 
-// Bugs page
-#[derive(Serialize)]
-pub struct BugContext {
-    pub category: String,
-    pub bugs: Vec<Bug>
+// Alias setting struct
+#[derive(FromForm)]
+pub struct Alias {
+    pub id: String,
+    pub alias: String,
 }
 
-// Clothing page
-#[derive(Serialize)]
-pub struct ClothingContext {
-    pub category: String,
-    pub clothing: Vec<Clothing>
+// Fossil form struct
+#[derive(FromForm)]
+pub struct FossilForm {
+    pub id: String,
 }
 
-// Fish page
-#[derive(Serialize)]
-pub struct FishContext {
-    pub category: String,
-    pub fish: Vec<Fish>
+// Recipe form struct
+#[derive(FromForm)]
+pub struct RecipeForm {
+    pub id: String,
 }
 
-// Flowers page
+// Context structs
+
+// Empty context for testing
 #[derive(Serialize)]
-pub struct FlowerContext {
-    pub category: String,
-    pub flowers: Vec<Flower>
+pub struct EmptyContext {}
+
+// Index/main context
+#[derive(Serialize)]
+pub struct IndexContext {
+    pub userid: String,
+    pub fossils: i32,
+    pub recipes: i32,
 }
 
-// Fossils page
+// Fossil Editing
 #[derive(Serialize)]
-pub struct FossilContext {
-    pub category: String,
-    pub fossils: Vec<Fossil>
+pub struct FossilEditContext {
+    pub id: String,
 }
 
-// Furniture page
+// Fossil Self Report
 #[derive(Serialize)]
-pub struct FurnitureContext {
-    pub category: String,
-    pub furniture: Vec<Furniture>
+pub struct FossilSelfContext {
+    pub id: String,
 }
 
-// Items page
+// Fossil All Report
 #[derive(Serialize)]
-pub struct ItemContext {
-    pub category: String,
-    pub items: Vec<Item>
+pub struct FossilAllContext {
+    pub id: String
 }
 
-// Recipes page
+// Fossil whogot report
 #[derive(Serialize)]
-pub struct RecipeContext {
-    pub category: String,
-    pub recipes: Vec<Recipe>
+pub struct FossilGotContext {
+    pub id: String,
 }
 
-// Walls n floors page
+// Fossil whoneed report
 #[derive(Serialize)]
-pub struct WallfloorContext {
-    pub category: String,
-    pub wallfoors: Vec<Wallfloor>
+pub struct FossilNeedContext {
+    pub id: String,
 }
 
+// Recipe Editing
+#[derive(Serialize)]
+pub struct RecipeEditContext {
+    pub id: String,
+}
+
+// Recipe Self Report
+#[derive(Serialize)]
+pub struct RecipeSelfContext {
+    pub id: String,
+}
+
+// Recipe All Report
+#[derive(Serialize)]
+pub struct RecipeAllContext {
+    pub id: String
+}
+
+// Recipe whogot report
+#[derive(Serialize)]
+pub struct RecipeGotContext {
+    pub id: String,
+}
+
+// Recipe whoneed report
+#[derive(Serialize)]
+pub struct RecipeNeedContext {
+    pub id: String,
+}

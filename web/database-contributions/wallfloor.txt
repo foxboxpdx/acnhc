@@ -1,5 +1,0 @@
-## Put Wallpapers and Flooring In Here.  Separate fields with colons!
-## Name:Wall or Floor:Size(s,m,l,whole):Animated?:Sell:Buy
-## Example:
-## Bamboo Wall:Wall:n/a:no:500:350
-## Simple Rug:Floor:small:no:750:500

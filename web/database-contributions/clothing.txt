@@ -1,4 +1,0 @@
-## Put Clothing In Here.  Separate fields with colons!
-## Name:Type (hat, helmet, glasses, etc):sell price:buy price:variation1, variation2
-## Example:
-## Slacks:pants:750:500:blue, black, tan

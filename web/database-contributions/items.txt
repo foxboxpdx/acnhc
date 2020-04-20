@@ -1,6 +1,0 @@
-## Put Items In Here.  Separate fields with colons!
-## Name:Selling Price
-## Examples:
-## Peach:400
-## Wasp Nest:500
-## Iron Nugget:1250

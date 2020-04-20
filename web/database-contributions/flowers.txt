@@ -1,4 +1,0 @@
-## Put Flowers In Here.  Separate fields with colons!
-## Species:Color:Hybrid?:Sell price
-## Example:
-## Rose:Purple:Yes:300

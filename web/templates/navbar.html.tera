@@ -1,36 +1,45 @@
 <nav class="navbar sidebar panel" role="navigation">
-    <div class="container-fluid">
-		<!-- Brand and toggle get grouped for better mobile display -->
-		<div class="navbar-header panel-info">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<div class="panel-heading">
-			<h1 class="panel-title">ACNH Catalog v0.0.1</h1>
-			</div>
-		</div>
-		<!-- Collect the nav links, forms, and other content for toggling -->
-		<div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="/">Home<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">View Catalog Data <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-globe"></span></a>
-					<ul class="dropdown-menu forAnimate" role="menu">
-						<li><a href="/furniture">Furniture</a></li>
-						<li><a href="/clothing">Clothing</a></li>
-						<li><a href="/wallfloors">Walls and Floors</a></li>
-                                                <li><a href="/fish">Fish</a></li>
-                                                <li><a href="/bugs">Bugs</a></li>
-                                                <li><a href="/fossils">Fossils</a></li>
-                                                <li><a href="/flowers">Flowers</a></li>
-                                                <li><a href="/items">Items</a></li>
-                                                <li><a href="/recipes">Recipes</a></li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-	</div>
+  <div class="container-fluid">
+    <div class="navbar-header panel-info">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      </button>
+      <div class="panel-heading">
+        <h1 class="panel-title">ACNH Catalog v0.0.221rs</h1>
+      </div>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Login Link</a></li>
+        <li><a href="/alias">Set account alias</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fossils
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu forAnimate" role="menu">
+            <li><a href="/fossil/report">My Fossil Report</a></li>
+            <li><a href="/fossil/edit">Edit Fossils</a></li>
+            <li><a href="/fossil/allreport">All Users Report</a></li>
+            <li><a href="/fossil/whogot">Who has what you need?</a></li>
+            <li><a href="/fossil/whoneed">Who needs what you got?</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Recipes 
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu forAnimate" role="menu">
+            <li><a href="/recipe/report">My Recipe Report</a></li>
+            <li><a href="/recipe/edit">Edit Recipes</a></li>
+            <li><a href="/recipe/allreport">All Users Report</a></li>
+            <li><a href="/recipe/whogot">Who has what you need?</a></li>
+            <li><a href="/recipe/whoneed">Who needs what you got?</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>

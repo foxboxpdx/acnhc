@@ -1,99 +1,22 @@
 {% extends "base" %}
-
 {% block content %}
 <div class="container">
-    <div class="row">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h1 class="panel-title">ACNH Catalog At-A-Glance Stats</h1>
-            </div>
-            <div class="panel-body" id="metadata" style="display: block;">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h3 class="panel-title">Items</h3>
-							</div>
-							<div class="panel-body">
-								<div class="row">
-									<div class="col-md-7">
-										<h3>
-											Furniture:
-										</h3>
-									</div>
-									<div class="col-md-5"><h3>{{ furncount }}</h3></div>
-								</div>								
-								<div class="row">
-									<div class="col-md-7">
-										<h3>
-											Clothing:
-										</h3>
-									</div>
-									<div class="col-md-5"><h3>{{ clothcount }}</h3></div>
-								</div>
-								<div class="row">
-									<div class="col-md-7">
-										<h3>
-											Recipes:
-										</h3>
-									</div>
-									<div class="col-md-5"><h3>{{ recipecount }}</h3></div>
-								</div>
-                                                                <div class="row">
-                                                                        <div class="col-md-7">
-                                                                                <h3>
-                                                                                        Items:
-                                                                                </h3>
-                                                                        </div>
-                                                                        <div class="col-md-5"><h3>{{ itemcount }}</h3></div>
-                                                                </div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h3 class="panel-title">Creatures, Etc.</h3>
-							</div>
-							<div class="panel-body">
-								<div class="row">
-									<div class="col-md-7">
-										<h3>
-											Fish:
-										</h3>
-									</div>
-									<div class="col-md-5"><h3>{{ fishcount }}</h3></div>
-								</div>								
-								<div class="row">
-									<div class="col-md-7">
-										<h3>
-											Bugs:
-										</h3>
-									</div>
-									<div class="col-md-5"><h3>{{ bugcount }}</h3></div>
-								</div>
-								<div class="row">
-									<div class="col-md-7">
-										<h3>
-											Fossils:
-										</h3>
-									</div>
-									<div class="col-md-5"><h3>{{ fossilcount }}</h3></div>
-								</div>																
-                                                                <div class="row">
-                                                                        <div class="col-md-7">
-                                                                                <h3>
-                                                                                        Flowers:
-                                                                                </h3>
-                                                                        </div>
-                                                                        <div class="col-md-5"><h3>{{ flowercount }}</h3></div>
-                                                                </div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="row">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h1 class="panel-title">Catalog Status for {{ userid }}</h1>
+      </div>
+      <div class="panel-body" id="metadata" style="display: block;">
+        <div class="row">
+          <div class="col-md-6">
+            <h3>Fossils: XX / 73</h3>
+          </div>
+          <div class="col-md-6">
+            <h3>Recipes: XXX / 568</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock content %}

@@ -1,0 +1,33 @@
+{% extends "base" %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h2 class="panel-title">Login</h2>
+      </div>
+      <div class="panel-body">
+        Welcome to the ACNH Catalog!<br/>
+        <br/>
+        To create a new user, click below.  A new 32-bit UUID will be generated 
+        for you - be sure to copy/paste it somewhere for later!<br/>
+        <form action='/newuser' method='POST'>
+          <button type="button" class="btn btn-sm btn-primary" onClick="submit();">New User</button>
+        </form>
+        <br/>
+        <br/>
+        If you already have a user, please enter your 32-character UUID below 
+        and click the 'Login' button.  For faster logins in the future, bookmark
+        the 'login link' in the navigation bar to skip this screen.
+        <br/>
+        <form action='/dologin' method='POST'>
+        <input type='text' name='user_id' size='50' />
+        <button type="button" class="btn btn-sm btn-primary" onClick="submit();">Login</button>
+        </form>
+        <br/>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

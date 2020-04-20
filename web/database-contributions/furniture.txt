@@ -1,4 +1,0 @@
-## Put Furniture In Here.  Separate fields with colons!
-## Name:LxW:Floor/Wall:Sell price:Buy Price:variation1, variation2, variation3
-## Example:
-## Chair:1x1:Floor:500:350:natural, dark, colorful
