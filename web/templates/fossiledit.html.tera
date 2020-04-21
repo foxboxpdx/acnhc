@@ -1,0 +1,78 @@
+{% extends "base" %}
+{% block content %}
+<style>
+div.row { 
+  border: 1px solid;
+  border-bottom: 0px;
+}
+.container div.row:last-child {
+  border-bottom: 1px solid;
+}
+</style>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+              {% if user.alias == "None" %}
+                <h1 class="panel-title">User {{user.username}}'s Fossils</h1>
+              {% else %}
+                <h1 class="panel-title">{{user.alias}}'s Fossils</h1>
+              {% endif %}
+            </div>
+            <div class="panel-body" id="metadata" style="display: block;">
+            <form action="/savedata" method="POST">
+              <div class="row">
+                <div class="col-md-2">
+                  <h3>Got it?</h3>
+                </div>
+                <div class="col-md-2">
+                  <h3>Extras?</h3>
+                </div>
+                <div class="col-md-8">
+                  <h3>Fossil Name</h3>
+                </div>
+              </div>
+              {% for fossil in fossils %}
+                <div class="row">
+                {# Need to do a find in the Ownedfossil vec to see if this user #}
+                {# owns this particular fossil. #}
+                {% set ofossil = owned | filter(attribute="fossil_id", value=fossil.id) | first %}
+                {# If this works, ofossil will be either an empty string, or #}
+                {# the matching Ownedfossil.  We can easily test if for the former #}
+                {% if ofossil is string %}
+                  {# So this user doesn't own this fossil. Set the radio button #}
+                  {# to 0/false/off and the extras to 0 #}
+                  <div class="col-md-2">
+                   <input type="radio" value="1" name="owned[{{fossil.id}}]">Y
+                   <input type="radio" value="0" name="owned[{{fossil.id}}]" checked>N
+                  </div>
+                  <div class="col-md-2">
+                    <input type="text" size="2" name="extra[{{fossil.id}}]" value="0"/>
+                  </div>
+                {% else %}
+                  {# If its not a string it should be a struct so set the #}
+                  {# radio button to true and the extras ofossil.extras #}
+                  <div class="col-md-2">
+                    <input type="radio" value="1" name="owned[{{fossil.id}}]" checked>Y
+                    <input type="radio" value="0" name="owned[{{fossil.id}}]">N
+                  </div>
+                  <div class="col-md-2">
+                    <input type="text" size="2" name="extra[{{fossil.id}}]" value="{{ofossil.extras}}"/>
+                  </div>
+                {% endif %}
+                <div class="col-md-8">
+                  <h4>{{fossil.name}}</h4>
+                </div>
+               </div>
+             {% endfor %}
+             <div class="row">
+               <div class="col-md-11"> &nbsp; </div>
+               <div class="col-md-1">
+                 <button type="submit" class="btn btn-primary">Save</button>
+               </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -13,9 +13,14 @@ use rocket::response::Redirect;
 use rocket_contrib::serve::StaticFiles;
 use rocket::http::{Cookie, Cookies};
 use rocket_contrib::templates::Template;
+use rocket_contrib::databases::diesel;
 use uuid::Uuid;
 
 // Form and Context structs are stored in lib.rs
+
+// Hello database
+#[database("sqlite_db")]
+struct Conn(diesel::SqliteConnection);
 
 #[post("/dologin", data = "<userid>")]
 fn dologin(mut cookies: Cookies, userid: Form<Userid>) -> Redirect {
@@ -62,6 +67,7 @@ fn rocket() -> rocket::Rocket {
         .mount("/", routes![index, dologin, login, newuser])
         .mount("/", StaticFiles::from("public"))
         .attach(Template::fairing())
+        .attach(Conn::fairing())
 }
 
 fn main() {

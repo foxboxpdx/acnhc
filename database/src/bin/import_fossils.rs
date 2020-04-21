@@ -7,7 +7,7 @@ use std::fs;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let filename = &args[2];
+    let filename = &args[1];
 
     // Read the file
     let contents = fs::read_to_string(filename)

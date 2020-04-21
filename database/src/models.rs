@@ -1,7 +1,7 @@
 // Models for dat data
 use super::schema::*;
 
-#[derive(Identifiable, Queryable, Associations)]
+#[derive(Identifiable, Queryable, Associations, Serialize)]
 pub struct Fossil {
     pub id: i32,
     pub name: String,
@@ -13,7 +13,7 @@ pub struct NewFossil<'a> {
     pub name: &'a str,
 }
 
-#[derive(Identifiable, Queryable, Associations)]
+#[derive(Identifiable, Queryable, Associations, AsChangeset, Serialize)]
 pub struct User {
     pub id: i32,
     pub username: String,
@@ -27,7 +27,7 @@ pub struct NewUser<'a> {
     pub alias: &'a str,
 }
 
-#[derive(Identifiable, Queryable, Associations)]
+#[derive(Identifiable, Queryable, Associations, AsChangeset, Serialize)]
 #[belongs_to(User)]
 #[belongs_to(Fossil)]
 pub struct Ownedfossil {
@@ -45,7 +45,7 @@ pub struct NewOwnedfossil {
     pub fossil_id: i32
 }
 
-#[derive(Identifiable, Queryable, Associations)]
+#[derive(Identifiable, Queryable, Associations, Serialize)]
 pub struct Recipe {
     pub id: i32,
     pub name: String
@@ -57,7 +57,7 @@ pub struct NewRecipe<'a> {
     pub name: &'a str,
 }
 
-#[derive(Identifiable, Queryable, Associations)]
+#[derive(Identifiable, Queryable, Associations, AsChangeset, Serialize)]
 #[belongs_to(User)]
 #[belongs_to(Recipe)]
 pub struct Ownedrecipe {
