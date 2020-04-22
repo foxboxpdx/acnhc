@@ -96,6 +96,15 @@ pub fn get_uid_from_uname(conn: &SqliteConnection, name: &str) -> i32 {
     }
 }
 
+pub fn get_user_from_uname(conn: &SqliteConnection, name: &str) -> User {
+    use schema::users::dsl::*;
+    let user = users.filter(username.eq(name)).first(conn);
+    match user {
+        Ok(x) => x,
+        Err(_) => User { id: 0, username: "0".to_string(), alias: "0".to_string() }
+    }
+}
+
 pub fn count_owned_fossils(conn: &SqliteConnection, uid: i32) -> i64 {
     use schema::ownedfossils::dsl::*;
     let c = ownedfossils.filter(user_id.eq(uid)).count().get_result(conn);
@@ -114,3 +123,13 @@ pub fn count_owned_recipes(conn: &SqliteConnection, uid: i32) -> i64 {
     }
 }
 
+pub fn set_user_alias(conn: &SqliteConnection, uid: i32, a: &str) -> bool {
+    use schema::users::dsl::*;
+    let res = diesel::update(users.find(uid))
+                .set(alias.eq(a))
+                .execute(conn);
+    match res {
+        Ok(_) => true,
+        Err(_) => false
+    }
+}

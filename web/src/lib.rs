@@ -52,6 +52,12 @@ pub struct RecipeForm {
 #[derive(Serialize)]
 pub struct EmptyContext {}
 
+// Basic struct just containing a User
+#[derive(Serialize)]
+pub struct UserContext {
+  pub user: User
+}
+
 // Index/main context
 #[derive(Serialize)]
 pub struct IndexContext {
