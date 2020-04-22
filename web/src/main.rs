@@ -2,12 +2,15 @@
 
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
-#[macro_use] extern crate serde_derive;
+//#[macro_use] extern crate serde_derive;
 
 extern crate acnhc_web;
+extern crate acnhc_db;
 
 use acnhc_web::*;
-use std::collections::HashMap;
+//use acnhc_db::models::*;
+use acnhc_db::*;
+//use std::collections::HashMap;
 use rocket::request::Form;
 use rocket::response::Redirect;
 use rocket_contrib::serve::StaticFiles;
@@ -35,29 +38,45 @@ fn login() -> Template {
 }
 
 #[post("/newuser")]
-fn newuser(mut cookies: Cookies) -> Redirect {
+fn newuser(conn: Conn, mut cookies: Cookies) -> Redirect {
     // Make a UUID for the new user
     let uuid = Uuid::new_v4();
     let uuidstr = uuid.to_hyphenated().to_string();
+    let alias = "None".to_string();
 
     // Set it as a cookie for later
-    cookies.add(Cookie::new("userid", uuidstr));
+    cookies.add(Cookie::new("userid", uuidstr.to_string()));
 
     // Generate a NewUser with the UUID and put it in the database
     // diesel stuff
+    let _ = acnhc_db::create_user(&*conn, &uuidstr, &alias);
 
     // Send user back to main
     Redirect::to("/")
 }
 
 #[get("/")]
-fn index(cookies: Cookies) -> Template {
+fn index(conn: Conn, cookies: Cookies) -> Template {
     let cookie = cookies.get("userid");
-    let mut context = HashMap::new();
+    // If our cookie isn't set, redirect to login.
+    // Otherwise get the user's data and counts from the join tables
     if let Some(ref cookie) = cookie {
-        context.insert("userid", cookie.value());
+        let uname = cookie.value();
+        let uid = get_uid_from_uname(&*conn, &uname);
+        // This returns 0 on error so uh...do something
+        if uid == 0 {
+            let x = EmptyContext {};
+            Template::render("login", &x);
+        }
+        let fcount = count_owned_fossils(&*conn, uid);
+        let rcount = count_owned_recipes(&*conn, uid);
+        let context = IndexContext { user: uname.to_string(),
+                                     fossils: fcount,
+                                     recipes: rcount };
+        // ok cool
         Template::render("index", &context)
     } else {
+        let context = EmptyContext {};
         Template::render("login", &context)
     }
 }

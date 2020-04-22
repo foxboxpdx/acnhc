@@ -4,15 +4,15 @@
   <div class="row">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <h1 class="panel-title">Catalog Status for {{ userid }}</h1>
+        <h1 class="panel-title">Catalog Status for {{ user }}</h1>
       </div>
       <div class="panel-body" id="metadata" style="display: block;">
         <div class="row">
           <div class="col-md-6">
-            <h3>Fossils: XX / 73</h3>
+            <h3>Fossils: {{ fossils }} / 73</h3>
           </div>
           <div class="col-md-6">
-            <h3>Recipes: XXX / 568</h3>
+            <h3>Recipes: {{ recipes }} / 568</h3>
           </div>
         </div>
       </div>

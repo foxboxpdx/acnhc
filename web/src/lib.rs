@@ -56,8 +56,8 @@ pub struct EmptyContext {}
 #[derive(Serialize)]
 pub struct IndexContext {
     pub user: String,
-    pub fossils: i32,
-    pub recipes: i32,
+    pub fossils: i64,
+    pub recipes: i64,
 }
 
 // Fossil Editing

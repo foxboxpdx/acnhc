@@ -87,3 +87,30 @@ pub fn create_ownedrecipe(conn: &SqliteConnection, u: i32, r: i32) -> usize {
         .expect("Error saving owned recipe")
 }
 
+pub fn get_uid_from_uname(conn: &SqliteConnection, name: &str) -> i32 {
+    use schema::users::dsl::*;
+    let uid = users.filter(username.eq(name)).select(id).first(conn);
+    match uid {
+        Ok(x) => x,
+        Err(_) => 0
+    }
+}
+
+pub fn count_owned_fossils(conn: &SqliteConnection, uid: i32) -> i64 {
+    use schema::ownedfossils::dsl::*;
+    let c = ownedfossils.filter(user_id.eq(uid)).count().get_result(conn);
+    match c {
+        Ok(x) => x,
+        Err(_) => 0
+    }
+}
+
+pub fn count_owned_recipes(conn: &SqliteConnection, uid: i32) -> i64 {
+    use schema::ownedrecipes::dsl::*;
+    let c = ownedrecipes.filter(user_id.eq(uid)).count().get_result(conn);
+    match c {
+        Ok(x) => x,
+        Err(_) => 0
+    }
+}
+
