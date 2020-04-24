@@ -4,13 +4,14 @@
 #[macro_use] extern crate rocket_contrib;
 //#[macro_use] extern crate serde_derive;
 
+extern crate url;
 extern crate acnhc_web;
 extern crate acnhc_db;
 
 use acnhc_web::*;
 use acnhc_db::models::*;
 use acnhc_db::*;
-//use std::collections::HashMap;
+use std::collections::BTreeMap;
 use rocket::request::Form;
 use rocket::response::Redirect;
 use rocket_contrib::serve::StaticFiles;
@@ -85,13 +86,20 @@ fn alias(conn: Conn, cookies: Cookies) -> Template {
 
 #[post("/setalias", data = "<alias>")]
 fn setalias(conn: Conn, alias: Form<Alias>) -> Redirect {
-    set_user_alias(&*conn, alias.id, &alias.alias);
+    let id: i32 = alias.id.parse().unwrap();
+    set_user_alias(&*conn, id, &alias.alias);
     Redirect::to("/")
 }
 
 // Fossil routes
 #[get("/edit")]
-fn fedit() {}
+fn fedit(conn: Conn, cookies: Cookies) -> Template {
+    let user = jamie_please(&conn, &cookies);
+    let fossils = load_fossils(&*conn);
+    let owned = load_owned_fossils(&*conn, user.id);
+    let context = FossilEditContext { user: user, fossils: fossils, owned: owned };
+    Template::render("fossiledit", &context)
+}
 
 #[get("/report")]
 fn freport() {}
@@ -122,8 +130,46 @@ fn rwhogot() {}
 fn rwhoneed() {}
 
 // Routes for saving form data
-#[post("/fossil")]
-fn fsave() {}
+#[post("/fossil", data = "<data>")]
+fn fsave(conn: Conn, cookies: Cookies, data: Form<EditForm>) -> Redirect {
+    // Parse the jsonified owned/extra strings
+    let o: BTreeMap<i32, bool> = serde_json::from_str(&data.oj).unwrap();
+    let mut e: BTreeMap<i32, i32> = serde_json::from_str(&data.xj).unwrap();
+
+    // Delete from 'e' wherever 'o' has false
+    for (idx, stat) in &o {
+        if *stat == true { continue; }
+        let _ = e.remove(idx);
+    }
+    // Retrieve the user record and owned fossil records
+    let user = jamie_please(&conn, &cookies);
+    let owned = load_owned_fossils(&*conn, user.id);
+    let mut newfossils: Vec<NewOwnedfossil> = Vec::new();
+    let mut updates: Vec<(i32, i32)> = Vec::new();
+
+    for (fos_id, cnt) in e {
+        if let Some(existing) = owned.iter().find(|e| e.fossil_id == fos_id) {
+            // Check for updates, push into updates vec if needed
+            if existing.extra == cnt { continue; }
+            else {
+                updates.push((existing.id, cnt));
+            }
+        } else {
+            // Generate NewOwnedFossil and push into vec
+            let nof = NewOwnedfossil {
+                user_id: user.id,
+                fossil_id: fos_id,
+                extra: cnt };
+            newfossils.push(nof);
+        }
+    }
+
+    // Send to database
+    batch_ownedfossils(&*conn, newfossils);
+    update_owned(&*conn, updates);
+
+    Redirect::to("/fossil/edit")
+}
 
 #[post("/recipe")]
 fn rsave() {}

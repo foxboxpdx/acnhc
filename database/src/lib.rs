@@ -59,12 +59,13 @@ pub fn create_recipe<'a>(conn: &SqliteConnection, name: &'a str) -> usize {
         .expect("Error saving new recipe")
 }
 
-pub fn create_ownedfossil(conn: &SqliteConnection, u: i32, f: i32) -> usize {
+pub fn create_ownedfossil(conn: &SqliteConnection, u: i32, f: i32, e: i32) -> usize {
     use schema::ownedfossils;
 
     let new_of = NewOwnedfossil {
         user_id: u,
-        fossil_id: f
+        fossil_id: f,
+        extra: e
     };
 
     diesel::insert_into(ownedfossils::table)
@@ -131,5 +132,49 @@ pub fn set_user_alias(conn: &SqliteConnection, uid: i32, a: &str) -> bool {
     match res {
         Ok(_) => true,
         Err(_) => false
+    }
+}
+
+pub fn load_fossils(conn: &SqliteConnection) -> Vec<Fossil> {
+    use schema::fossils::dsl::*;
+    fossils.load::<Fossil>(conn).expect("Error loading fossils")
+}
+
+pub fn load_owned_fossils(conn: &SqliteConnection, uid: i32) -> Vec<Ownedfossil> {
+    use schema::ownedfossils::dsl::*;
+    ownedfossils
+        .filter(user_id.eq(uid))
+        .load::<Ownedfossil>(conn)
+        .expect("Error loading owned fossils")
+}
+
+pub fn load_recipes(conn: &SqliteConnection) -> Vec<Recipe> {
+    use schema::recipes::dsl::*;
+    recipes.load::<Recipe>(conn).expect("Error loading recipes")
+}
+
+pub fn load_owned_recipes(conn: &SqliteConnection, uid: i32) -> Vec<Ownedrecipe> {
+    use schema::ownedrecipes::dsl::*;
+    ownedrecipes
+        .filter(user_id.eq(uid))
+        .load::<Ownedrecipe>(conn)
+        .expect("Error loading owned recipes")
+}
+
+pub fn batch_ownedfossils(conn: &SqliteConnection, records: Vec<NewOwnedfossil>) {
+    use schema::ownedfossils;
+    diesel::insert_into(ownedfossils::table)
+        .values(&records)
+        .execute(conn)
+        .expect("Error saving owned fossils");
+}
+
+pub fn update_owned(conn: &SqliteConnection, records: Vec<(i32, i32)>) {
+    use schema::ownedfossils::dsl::*;
+    for x in records {
+        diesel::update(ownedfossils.find(x.0))
+                .set(extra.eq(x.1))
+                .execute(conn)
+                .expect("Error updating owned fossil");
     }
 }

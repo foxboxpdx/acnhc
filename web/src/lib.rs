@@ -6,16 +6,9 @@
 extern crate rocket_contrib;
 extern crate acnhc_db;
 
-use std::collections::HashMap;
-use rocket::http::RawStr;
 use acnhc_db::models::*;
-// Form structs
 
-// Raw form data
-#[derive(FromForm)]
-pub struct RawForm<'f> {
-    pub value: &'f RawStr
-}
+// Form structs //
 
 // Login struct
 #[derive(FromForm)]
@@ -30,23 +23,17 @@ pub struct Alias {
     pub alias: String,
 }
 
-// Fossil form struct
-#[derive(FromForm)]
-pub struct FossilForm {
-    pub id: String,
+// Edit form struct
+// XJ and OJ are json-encoded hashmaps
+#[derive(FromForm, Debug)]
+pub struct EditForm {
     pub owned: String,
     pub extra: String,
+    pub oj: String,
+    pub xj: String
 }
 
-// Recipe form struct
-#[derive(FromForm)]
-pub struct RecipeForm {
-    pub id: String,
-    pub owned: String,
-    pub extra: String,
-}
-
-// Context structs
+// Context structs //
 
 // Empty context for testing
 #[derive(Serialize)]

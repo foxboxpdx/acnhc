@@ -7,7 +7,7 @@ table! {
 
 table! {
     ownedfossils (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         user_id -> Integer,
         fossil_id -> Integer,
         owned -> Bool,

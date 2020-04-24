@@ -28,8 +28,6 @@ pub struct NewUser<'a> {
 }
 
 #[derive(Identifiable, Queryable, Associations, AsChangeset, Serialize)]
-#[belongs_to(User)]
-#[belongs_to(Fossil)]
 pub struct Ownedfossil {
     pub id: i32,
     pub user_id: i32,
@@ -42,7 +40,8 @@ pub struct Ownedfossil {
 #[table_name="ownedfossils"]
 pub struct NewOwnedfossil {
     pub user_id: i32,
-    pub fossil_id: i32
+    pub fossil_id: i32,
+    pub extra: i32
 }
 
 #[derive(Identifiable, Queryable, Associations, Serialize)]
