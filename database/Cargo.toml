@@ -1,6 +1,6 @@
 [package]
 name = "acnhc-db"
-version = "0.4.1"
+version = "0.4.9"
 authors = ["Fox Box <foxboxpdx@gmail.com>"]
 edition = "2018"
 

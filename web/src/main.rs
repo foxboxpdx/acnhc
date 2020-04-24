@@ -94,40 +94,101 @@ fn setalias(conn: Conn, alias: Form<Alias>) -> Redirect {
 // Fossil routes
 #[get("/edit")]
 fn fedit(conn: Conn, cookies: Cookies) -> Template {
-    let user = jamie_please(&conn, &cookies);
-    let fossils = load_fossils(&*conn);
-    let owned = load_owned_fossils(&*conn, user.id);
-    let context = FossilEditContext { user: user, fossils: fossils, owned: owned };
+    let (user, fossils, owned) = get_fossil_data(&conn, &cookies, false);
+    let context = FossilSelfContext { user: user, fossils: fossils, owned: owned };
     Template::render("fossiledit", &context)
 }
 
 #[get("/report")]
-fn freport() {}
+fn freport(conn: Conn, cookies: Cookies) -> Template {
+    let (user, fossils, owned) = get_fossil_data(&conn, &cookies, false);
+    let context = FossilSelfContext { user: user, fossils: fossils, owned: owned };
+    Template::render("fossilreport", &context)
+}
 
 #[get("/allreport")]
-fn fall() {}
+fn fall(conn: Conn, cookies: Cookies) -> Template {
+    let users = load_users(&*conn);
+    let (_thisuser, fossils, owned) = get_fossil_data(&conn, &cookies, true);
+    let context = FossilAllContext { users: users, fossils: fossils, owned: owned };
+    Template::render("fossilallreport", &context)
+}
 
 #[get("/whogot")]
-fn fwhogot() {}
+fn fwhogot(conn: Conn, cookies: Cookies) -> Template {
+    // Foreach fossil, look in owned data for thisuser.id/fossil.id combination
+    // If not found, get userids that own it with extra > 0
+    // Grab user aliases, push into vec, insert with fossil name into BTMap
+    // Send BTMap to template renderer
+    let users = load_users(&*conn);
+    let (thisuser, fossils, owned) = get_fossil_data(&conn, &cookies, true);
+    let mut contextmap = BTreeMap::new();
+    for f in fossils {
+        if let Some(existing) = 
+                owned
+                .iter()
+                .find(|e| e.fossil_id == f.id && e.user_id == thisuser.id) {
+            continue;
+        } else {
+            // Something to do with iter.filter to get multiple owned instances
+            // with extra > 0
+        }
+    }
+    Template::render("fossilgotreport", &contextmap)
+}
+
 
 #[get("/whoneed")]
-fn fwhoneed() {}
+fn fwhoneed(conn: Conn, cookies: Cookies) -> Template {
+    // Foreach fossil, look in owned data for thisuser.id/fossil.id/extra > 0
+    // Get userids that own it and delete them from users vec
+    // Grab user aliases, push into vec, insert with fossil name into BTMap
+    // Send BTMap to template renderer
+    let users = load_users(&*conn);
+    let (thisuser, fossils, owned) = get_fossil_data(&conn, &cookies, true);
+    let context = FossilAllContext { users: users, fossils: fossils, owned: owned };
+    Template::render("fossilneedreport", &context)
+}
 
 // Recipe routes
 #[get("/edit")]
-fn redit() {}
+fn redit(conn: Conn, cookies: Cookies) -> Template {
+    let (user, recipes, owned) = get_recipe_data(&conn, &cookies, false);
+    let context = RecipeSelfContext { user: user, recipes: recipes, owned: owned };
+    Template::render("recipeedit", &context)
+}
 
 #[get("/report")]
-fn rreport() {}
+fn rreport(conn: Conn, cookies: Cookies) -> Template {
+    let (user, recipes, owned) = get_recipe_data(&conn, &cookies, false);
+    let context = RecipeSelfContext { user: user, recipes: recipes, owned: owned };
+    Template::render("recipereport", &context)
+}
 
 #[get("/allreport")]
-fn rall() {}
+fn rall(conn: Conn, cookies: Cookies) -> Template {
+    let users = load_users(&*conn);
+    let (thisuser, recipes, owned) = get_recipe_data(&conn, &cookies, true);
+    let context = RecipeAllContext { users: users, recipes: recipes, owned: owned };
+    Template::render("recipeallreport", &context)
+}
 
 #[get("/whogot")]
-fn rwhogot() {}
+fn rwhogot(conn: Conn, cookies: Cookies) -> Template {
+    let users = load_users(&*conn);
+    let (thisuser, recipes, owned) = get_recipe_data(&conn, &cookies, true);
+    let context = RecipeAllContext { users: users, recipes: recipes, owned: owned };
+    Template::render("recipegotreport", &context)
+}
+
 
 #[get("/whoneed")]
-fn rwhoneed() {}
+fn rwhoneed(conn: Conn, cookies: Cookies) -> Template {
+    let users = load_users(&*conn);
+    let (thisuser, recipes, owned) = get_recipe_data(&conn, &cookies, true);
+    let context = RecipeAllContext { users: users, recipes: recipes, owned: owned };
+    Template::render("recipeneedreport", &context)
+}
 
 // Routes for saving form data
 #[post("/fossil", data = "<data>")]
@@ -215,4 +276,33 @@ fn jamie_please(conn: &Conn, cookies: &Cookies) -> User {
     } else {
         User { id: 0, username: "0".to_string(), alias: "0".to_string() }
     }
+}
+
+// Ok since this trio of statements keeps appearing lets factor it out
+// the bool determines whether we get ALL owned items or just one users' items
+fn get_fossil_data(conn: &Conn, cookies: &Cookies, all: bool) 
+        -> (User, Vec<Fossil>, Vec<Ownedfossil>) {
+    let user = jamie_please(&conn, &cookies);
+    let fossils = load_fossils(&*conn);
+    let mut owned = Vec::new();
+    if all {
+        owned = load_all_owned_fossils(&*conn);
+    } else {
+        owned = load_owned_fossils(&*conn, user.id);
+    }
+    (user, fossils, owned)
+}
+
+// Same for recipes
+fn get_recipe_data(conn: &Conn, cookies: &Cookies, all: bool) 
+        -> (User, Vec<Recipe>, Vec<Ownedrecipe>) {
+    let user = jamie_please(&conn, &cookies);
+    let recipes = load_recipes(&*conn);
+    let mut owned = Vec::new();
+    if all {
+        owned = load_all_owned_recipes(&*conn);
+    } else {
+        owned = load_owned_recipes(&*conn, user.id);
+    }
+    (user, recipes, owned)
 }

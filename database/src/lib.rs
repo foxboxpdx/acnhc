@@ -135,6 +135,11 @@ pub fn set_user_alias(conn: &SqliteConnection, uid: i32, a: &str) -> bool {
     }
 }
 
+pub fn load_users(conn: &SqliteConnection) -> Vec<User> {
+    use schema::users::dsl::*;
+    users.load::<User>(conn).expect("Error loading users")
+}
+
 pub fn load_fossils(conn: &SqliteConnection) -> Vec<Fossil> {
     use schema::fossils::dsl::*;
     fossils.load::<Fossil>(conn).expect("Error loading fossils")
@@ -148,6 +153,13 @@ pub fn load_owned_fossils(conn: &SqliteConnection, uid: i32) -> Vec<Ownedfossil>
         .expect("Error loading owned fossils")
 }
 
+pub fn load_all_owned_fossils(conn: &SqliteConnection) -> Vec<Ownedfossil> {
+    use schema::ownedfossils::dsl::*;
+    ownedfossils
+        .load::<Ownedfossil>(conn)
+        .expect("Error loading all owned fossils")
+}
+
 pub fn load_recipes(conn: &SqliteConnection) -> Vec<Recipe> {
     use schema::recipes::dsl::*;
     recipes.load::<Recipe>(conn).expect("Error loading recipes")
@@ -159,6 +171,13 @@ pub fn load_owned_recipes(conn: &SqliteConnection, uid: i32) -> Vec<Ownedrecipe>
         .filter(user_id.eq(uid))
         .load::<Ownedrecipe>(conn)
         .expect("Error loading owned recipes")
+}
+
+pub fn load_all_owned_recipes(conn: &SqliteConnection) -> Vec<Ownedrecipe> {
+    use schema::ownedrecipes::dsl::*;
+    ownedrecipes
+        .load::<Ownedrecipe>(conn)
+        .expect("Error loading all owned recipes")
 }
 
 pub fn batch_ownedfossils(conn: &SqliteConnection, records: Vec<NewOwnedfossil>) {
@@ -178,3 +197,4 @@ pub fn update_owned(conn: &SqliteConnection, records: Vec<(i32, i32)>) {
                 .expect("Error updating owned fossil");
     }
 }
+

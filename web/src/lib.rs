@@ -53,23 +53,15 @@ pub struct IndexContext {
     pub recipes: i64,
 }
 
-// Fossil Editing
+// Single user fossil data
 #[derive(Serialize)]
-pub struct FossilEditContext {
+pub struct FossilSelfContext {
     pub user: User,
     pub fossils: Vec<Fossil>,
     pub owned: Vec<Ownedfossil>,
 }
 
-// Fossil Self Report
-#[derive(Serialize)]
-pub struct FossilSelfContext {
-    pub id: String,
-    pub fossils: Vec<Fossil>,
-    pub owned: Vec<Ownedfossil>,
-}
-
-// Fossil All Report
+// All user fossil data
 #[derive(Serialize)]
 pub struct FossilAllContext {
     pub users: Vec<User>,
@@ -77,48 +69,18 @@ pub struct FossilAllContext {
     pub fossils: Vec<Fossil>,
 }
 
-// Fossil whogot report
-#[derive(Serialize)]
-pub struct FossilGotContext {
-    pub users: Vec<User>,
-    pub owned: Vec<Ownedfossil>,
-    pub fossils: Vec<Fossil>,
-}
-
-// Fossil whoneed report
-#[derive(Serialize)]
-pub struct FossilNeedContext {
-    pub users: Vec<User>,
-    pub owned: Vec<Ownedfossil>,
-    pub fossils: Vec<Fossil>,
-}
-
-// Recipe Editing
-#[derive(Serialize)]
-pub struct RecipeEditContext {
-    pub id: String,
-}
-
-// Recipe Self Report
+// Single user recipe data
 #[derive(Serialize)]
 pub struct RecipeSelfContext {
-    pub id: String,
+    pub user: User,
+    pub recipes: Vec<Recipe>,
+    pub owned: Vec<Ownedrecipe>
 }
 
-// Recipe All Report
+// All user recipe data
 #[derive(Serialize)]
 pub struct RecipeAllContext {
-    pub id: String
-}
-
-// Recipe whogot report
-#[derive(Serialize)]
-pub struct RecipeGotContext {
-    pub id: String,
-}
-
-// Recipe whoneed report
-#[derive(Serialize)]
-pub struct RecipeNeedContext {
-    pub id: String,
+    pub users: Vec<User>,
+    pub owned: Vec<Ownedrecipe>,
+    pub recipes: Vec<Recipe>
 }
