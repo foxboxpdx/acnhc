@@ -8,15 +8,15 @@
 * ~~Fossil Edit page~~
 * ~~Fossil report logic~~
 * ~~Fossil all users report logic~~
-* Fossil 'whogot' report logic
-* Fossil 'whoneed' report logic
+* ~~Fossil 'whogot' report logic~~
+* ~~Fossil 'whoneed' report logic~~
 * Alias changing
 * Logout/cookie clear
 * Auto-login through bookmarked link
 * ~~Process fossil editing form to save changes to DB~~
 * ~~Fossil edit template~~
-* Fossil report template
-* Fossil all-report template
+* ~~Fossil report template~~
+* ~~Fossil all-report template~~
 * Fossil whogot/whoneed template
 * Make sure logins work through login page
 * Auto version in navbar
