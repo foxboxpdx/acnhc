@@ -1,0 +1,54 @@
+{% extends "base" %}
+{% block content %}
+<style>
+div.got {
+  background-color: #aaffaa;
+}
+div.not {
+  background-color: #ffaaaa;
+}
+</style>
+<div class="container">
+ <div class="row">
+  <div class="panel panel-info">
+   <div class="panel-heading">
+    <h3>All Users Fossil Report</h3>
+   </div>
+   <div class="panel-body">
+    {% for u in users %}
+      {% if u.alias == "None" %}{% continue %}{% endif %}
+    <div class="row">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+              <h1 class="panel-title">{{u.alias}}'s Fossil Report</h1>
+            </div>
+            <div class="panel-body" id="metadata" style="display: block;">
+              <div class="row">
+              {% set counter = 0 %}
+              {% for fossil in fossils %}
+                {% set of = owned | filter(attribute="fossil_id", value=fossil.id) | first %}
+                {% if of is string %}
+                  {% set x = "not" %}
+                  {% set y = 0 %}
+                {% else %}
+                  {% set x = "got" %}
+                  {% set y = of.extra %}
+                {% endif %}
+                <div class="col-md-2 {{x}}">
+                  {{fossil.name}} <b>({{y}})</b>
+                </div>
+                {% set counter = counter + 1 %}
+                {% if counter == 6 %}
+                  {% set counter = 0 %}
+                  </div><div class="row">
+                {% endif %}
+              {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+   </div>
+  </div>
+ </div>
+</div>
+{% endblock content %}

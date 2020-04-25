@@ -116,22 +116,29 @@ fn fall(conn: Conn, cookies: Cookies) -> Template {
 
 #[get("/whogot")]
 fn fwhogot(conn: Conn, cookies: Cookies) -> Template {
-    // Foreach fossil, look in owned data for thisuser.id/fossil.id combination
-    // If not found, get userids that own it with extra > 0
-    // Grab user aliases, push into vec, insert with fossil name into BTMap
-    // Send BTMap to template renderer
     let users = load_users(&*conn);
     let (thisuser, fossils, owned) = get_fossil_data(&conn, &cookies, true);
     let mut contextmap = BTreeMap::new();
     for f in fossils {
-        if let Some(existing) = 
+        if let Some(_) = 
                 owned
                 .iter()
                 .find(|e| e.fossil_id == f.id && e.user_id == thisuser.id) {
             continue;
         } else {
-            // Something to do with iter.filter to get multiple owned instances
-            // with extra > 0
+            // filter on > 0 extras
+            let known_extras = owned.iter()
+                .filter(|e| e.fossil_id == f.id && e.extra > 0);
+            // Get user_id, look up alias, push in Vec
+            let mut aliases = Vec::new();
+            for ke in known_extras {
+                if let Some(u) = users
+                    .iter()
+                    .find(|e| e.id == ke.user_id && e.alias != "None".to_string()) {
+                    aliases.push(u.alias.to_string());
+                }
+            }
+            contextmap.insert(f.name.to_string(), aliases);
         }
     }
     Template::render("fossilgotreport", &contextmap)
@@ -146,8 +153,36 @@ fn fwhoneed(conn: Conn, cookies: Cookies) -> Template {
     // Send BTMap to template renderer
     let users = load_users(&*conn);
     let (thisuser, fossils, owned) = get_fossil_data(&conn, &cookies, true);
-    let context = FossilAllContext { users: users, fossils: fossils, owned: owned };
-    Template::render("fossilneedreport", &context)
+    let mut contextmap = BTreeMap::new();
+    // Before we start iterating through fossils, get a list of ALL user ids
+    // and aliases, for good measure.
+    let mut userids = BTreeMap::new();
+    for u in users {
+        if u.alias != "None".to_string() {
+            userids.insert(u.id, u.alias.to_string());
+        }
+    }
+    for f in fossils {
+        if let Some(_) =
+            owned.iter().find(|e| e.fossil_id == f.id && e.user_id == thisuser.id && e.extra > 0) {
+                // Make a fresh copy of the userids map 
+                let mut localuids = userids.clone();
+                // Iterate through owned looking for this fossil_id and delete
+                // any users id's from localuids
+                let known_owners = owned.iter().filter(|e| e.fossil_id == f.id);
+                for ko in known_owners {
+                    let _ = localuids.remove(&ko.user_id);
+                }
+                // whoever's left in localuids needs the fossil
+                // compile into a string vec and slam into contextmap
+                let mut aliases = Vec::new();
+                for (_u, a) in localuids {
+                    aliases.push(a.to_string());
+                }
+                contextmap.insert(f.name.to_string(), aliases);
+            }
+    }
+    Template::render("fossilneedreport", &contextmap)
 }
 
 // Recipe routes
