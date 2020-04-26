@@ -1,4 +1,11 @@
 table! {
+    arts (id) {
+        id -> Integer,
+        name -> Text,
+    }
+}
+
+table! {
     fossils (id) {
         id -> Integer,
         name -> Text,
@@ -6,11 +13,19 @@ table! {
 }
 
 table! {
+    ownedarts (id) {
+        id -> Integer,
+        user_id -> Integer,
+        item_id -> Integer,
+        extra -> Integer,
+    }
+}
+
+table! {
     ownedfossils (id) {
         id -> Integer,
         user_id -> Integer,
-        fossil_id -> Integer,
-        owned -> Bool,
+        item_id -> Integer,
         extra -> Integer,
     }
 }
@@ -19,8 +34,7 @@ table! {
     ownedrecipes (id) {
         id -> Integer,
         user_id -> Integer,
-        recipe_id -> Integer,
-        owned -> Bool,
+        item_id -> Integer,
         extra -> Integer,
     }
 }
@@ -41,7 +55,9 @@ table! {
 }
 
 allow_tables_to_appear_in_same_query!(
+    arts,
     fossils,
+    ownedarts,
     ownedfossils,
     ownedrecipes,
     recipes,

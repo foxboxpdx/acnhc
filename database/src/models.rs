@@ -27,12 +27,11 @@ pub struct NewUser<'a> {
     pub alias: &'a str,
 }
 
-#[derive(Identifiable, Queryable, Associations, AsChangeset, Serialize)]
+#[derive(Identifiable, Queryable, AsChangeset, Serialize)]
 pub struct Ownedfossil {
     pub id: i32,
     pub user_id: i32,
-    pub fossil_id: i32,
-    pub owned: bool,
+    pub item_id: i32,
     pub extra: i32
 }
 
@@ -40,11 +39,11 @@ pub struct Ownedfossil {
 #[table_name="ownedfossils"]
 pub struct NewOwnedfossil {
     pub user_id: i32,
-    pub fossil_id: i32,
+    pub item_id: i32,
     pub extra: i32
 }
 
-#[derive(Identifiable, Queryable, Associations, Serialize)]
+#[derive(Identifiable, Queryable, Serialize)]
 pub struct Recipe {
     pub id: i32,
     pub name: String
@@ -56,14 +55,11 @@ pub struct NewRecipe<'a> {
     pub name: &'a str,
 }
 
-#[derive(Identifiable, Queryable, Associations, AsChangeset, Serialize)]
-#[belongs_to(User)]
-#[belongs_to(Recipe)]
+#[derive(Identifiable, Queryable, AsChangeset, Serialize)]
 pub struct Ownedrecipe {
     pub id: i32,
     pub user_id: i32,
-    pub recipe_id: i32,
-    pub owned: bool,
+    pub item_id: i32,
     pub extra: i32
 }
 
@@ -71,6 +67,34 @@ pub struct Ownedrecipe {
 #[table_name="ownedrecipes"]
 pub struct NewOwnedrecipe {
     pub user_id: i32,
-    pub recipe_id: i32
+    pub item_id: i32,
+    pub extra: i32
 }
 
+#[derive(Identifiable, Queryable, Serialize)]
+pub struct Art {
+    pub id: i32,
+    pub name: String
+}
+
+#[derive(Insertable)]
+#[table_name="arts"]
+pub struct NewArt<'a> {
+    pub name: &'a str,
+}
+
+#[derive(Identifiable, Queryable, AsChangeset, Serialize)]
+pub struct Ownedart {
+    pub id: i32,
+    pub user_id: i32,
+    pub item_id: i32,
+    pub extra: i32
+}
+
+#[derive(Insertable)]
+#[table_name="ownedarts"]
+pub struct NewOwnedart {
+    pub user_id: i32,
+    pub item_id: i32,
+    pub extra: i32
+}

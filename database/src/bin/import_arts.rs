@@ -14,13 +14,13 @@ fn main() {
     let contents = fs::read_to_string(filename)
         .expect("Couldn't read file");
 
-    let fossils: Vec<&str> = contents.split("\n").collect();
+    let arts: Vec<&str> = contents.split("\n").collect();
 
     // Connect to DB and dump the contents in
     let connection = establish_connection();
 
-    for name in fossils.iter() {
-        let _ = Fossil::create(&connection, name);
+    for name in arts.iter() {
+        let _ = Art::create(&connection, name);
         println!("\nSaved fossil {}", name);
     }
 }

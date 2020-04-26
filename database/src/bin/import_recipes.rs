@@ -2,6 +2,7 @@ extern crate acnhc_db;
 extern crate diesel;
 
 use self::acnhc_db::*;
+use self::acnhc_db::models::*;
 use std::env;
 use std::fs;
 
@@ -19,7 +20,7 @@ fn main() {
     let connection = establish_connection();
 
     for name in recipes.iter() {
-        let _ = create_recipe(&connection, name);
+        let _ = Recipe::create(&connection, name);
         println!("\nSaved recipe {}", name);
     }
 }

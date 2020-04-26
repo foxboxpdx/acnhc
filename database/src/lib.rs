@@ -10,6 +10,213 @@ use dotenv::dotenv;
 use std::env;
 use self::models::*;
 
+// Define common functions for "Item" types
+pub trait Item {
+    fn create<'a>(conn: &SqliteConnection, name: &'a str) -> usize;
+    fn load(conn: &SqliteConnection) -> Vec<Self> where Self: Sized;
+}
+
+impl Item for Fossil {
+    fn create<'a>(conn: &SqliteConnection, name: &'a str) -> usize {
+        use schema::fossils;
+        let new_fossil = NewFossil { name: name };
+        diesel::insert_into(fossils::table).values(&new_fossil).execute(conn)
+                .expect("error saving new fossil")
+    }
+
+    fn load(conn: &SqliteConnection) -> Vec<Fossil> {
+        use schema::fossils::dsl::*;
+        fossils.load::<Fossil>(conn).expect("Error loading fossils")
+    }
+}
+
+impl Item for Recipe {
+    fn create<'a>(conn: &SqliteConnection, name: &'a str) -> usize {
+        use schema::recipes;
+        let new_r = NewRecipe { name: name };
+        diesel::insert_into(recipes::table).values(&new_r).execute(conn)
+                .expect("error saving new recipe")
+    }
+
+    fn load(conn: &SqliteConnection) -> Vec<Recipe> {
+        use schema::recipes::dsl::*;
+        recipes.load::<Recipe>(conn).expect("error loading recipes")
+    }
+}
+
+impl Item for Art {
+    fn create<'a>(conn: &SqliteConnection, name: &'a str) -> usize {
+        use schema::arts;
+        let new_a = NewArt { name: name };
+        diesel::insert_into(arts::table).values(&new_a).execute(conn)
+                .expect("Error saving new arts")
+    }
+
+    fn load(conn: &SqliteConnection) -> Vec<Art> {
+        use schema::arts::dsl::*;
+        arts.load::<Art>(conn).expect("Error loading art")
+    }
+}
+
+// Define common functions for "OwnedItem" types
+pub trait OwnedItem {
+    fn create(conn: &SqliteConnection, u: i32, i: i32, e: i32) -> usize;
+    fn load(conn: &SqliteConnection, uid: i32) -> Vec<Self> where Self: Sized;
+    fn load_all(conn: &SqliteConnection) -> Vec<Self> where Self: Sized;
+    fn count(conn: &SqliteConnection, uid: i32) -> i64;
+    fn update(conn: &SqliteConnection, records: Vec<(i32, i32)>);
+}
+
+impl OwnedItem for Ownedfossil {
+    fn create(conn: &SqliteConnection, u: i32, i: i32, e: i32) -> usize {
+        use schema::ownedfossils;
+        let x = NewOwnedfossil { user_id: u, item_id: i, extra: e };
+        diesel::insert_into(ownedfossils::table).values(&x).execute(conn)
+                .expect("Error saving owned fossil")
+    }
+
+    fn load(conn: &SqliteConnection, uid: i32) -> Vec<Ownedfossil> {
+        use schema::ownedfossils::dsl::*;
+        ownedfossils.filter(user_id.eq(uid)).load::<Ownedfossil>(conn)
+                .expect("Error loading owned fossils")
+    }
+
+    fn load_all(conn: &SqliteConnection) -> Vec<Ownedfossil> {
+        use schema::ownedfossils::dsl::*;
+        ownedfossils.load::<Ownedfossil>(conn)
+                .expect("Error loading all owned fossils")
+    }
+
+    fn count(conn: &SqliteConnection, uid: i32) -> i64 {
+        use schema::ownedfossils::dsl::*;
+        let c = ownedfossils.filter(user_id.eq(uid)).count().get_result(conn);
+        match c {
+            Ok(x) => x,
+            Err(_) => 0
+        }
+    }
+
+    fn update(conn: &SqliteConnection, records: Vec<(i32, i32)>) {
+        use schema::ownedfossils::dsl::*;
+        for x in records {
+            diesel::update(ownedfossils.find(x.0))
+                .set(extra.eq(x.1))
+                .execute(conn)
+                .expect("Error updating owned fossil");
+        }
+    }
+}
+impl OwnedItem for Ownedrecipe {
+    fn create(conn: &SqliteConnection, u: i32, i: i32, e: i32) -> usize {
+        use schema::ownedrecipes;
+        let x = NewOwnedrecipe { user_id: u, item_id: i, extra: e };
+        diesel::insert_into(ownedrecipes::table).values(&x).execute(conn)
+                .expect("Error saving owned recipe")
+    }
+
+    fn load(conn: &SqliteConnection, uid: i32) -> Vec<Ownedrecipe> {
+        use schema::ownedrecipes::dsl::*;
+        ownedrecipes.filter(user_id.eq(uid)).load::<Ownedrecipe>(conn)
+                .expect("Error loading owned recipes")
+    }
+
+    fn load_all(conn: &SqliteConnection) -> Vec<Ownedrecipe> {
+        use schema::ownedrecipes::dsl::*;
+        ownedrecipes.load::<Ownedrecipe>(conn)
+                .expect("Error loading all owned recipes")
+    }
+
+    fn count(conn: &SqliteConnection, uid: i32) -> i64 {
+        use schema::ownedrecipes::dsl::*;
+        let c = ownedrecipes.filter(user_id.eq(uid)).count().get_result(conn);
+        match c {
+            Ok(x) => x,
+            Err(_) => 0
+        }
+    }
+
+    fn update(conn: &SqliteConnection, records: Vec<(i32, i32)>) {
+        use schema::ownedrecipes::dsl::*;
+        for x in records {
+            diesel::update(ownedrecipes.find(x.0))
+                .set(extra.eq(x.1))
+                .execute(conn)
+                .expect("Error updating owned recipe");
+        }
+    }
+}
+impl OwnedItem for Ownedart {
+    fn create(conn: &SqliteConnection, u: i32, i: i32, e: i32) -> usize {
+        use schema::ownedarts;
+        let x = NewOwnedart { user_id: u, item_id: i, extra: e };
+        diesel::insert_into(ownedarts::table).values(&x).execute(conn)
+                .expect("Error saving owned arts")
+    }
+
+    fn load(conn: &SqliteConnection, uid: i32) -> Vec<Ownedart> {
+        use schema::ownedarts::dsl::*;
+        ownedarts.filter(user_id.eq(uid)).load::<Ownedart>(conn)
+                .expect("Error loading owned arts")
+    }
+
+    fn load_all(conn: &SqliteConnection) -> Vec<Ownedart> {
+        use schema::ownedarts::dsl::*;
+        ownedarts.load::<Ownedart>(conn)
+                .expect("Error loading all owned arts")
+    }
+
+    fn count(conn: &SqliteConnection, uid: i32) -> i64 {
+        use schema::ownedarts::dsl::*;
+        let c = ownedarts.filter(user_id.eq(uid)).count().get_result(conn);
+        match c {
+            Ok(x) => x,
+            Err(_) => 0
+        }
+    }
+
+    fn update(conn: &SqliteConnection, records: Vec<(i32, i32)>) {
+        use schema::ownedarts::dsl::*;
+        for x in records {
+            diesel::update(ownedarts.find(x.0))
+                .set(extra.eq(x.1))
+                .execute(conn)
+                .expect("Error updating owned arts");
+        }
+    }
+}
+
+
+// Define common functions for NewOwnedItem types
+pub trait NewOwnedItem {
+    fn batch_create(conn: &SqliteConnection, records: Vec<Self>) where Self: Sized;
+}
+
+impl NewOwnedItem for NewOwnedfossil {
+    fn batch_create(conn: &SqliteConnection, records: Vec<NewOwnedfossil>) {
+        use schema::ownedfossils;
+        diesel::insert_into(ownedfossils::table).values(&records).execute(conn)
+                .expect("Error saving owned fossils");
+    }
+}
+
+impl NewOwnedItem for NewOwnedrecipe {
+    fn batch_create(conn: &SqliteConnection, records: Vec<NewOwnedrecipe>) {
+        use schema::ownedrecipes;
+        diesel::insert_into(ownedrecipes::table).values(&records).execute(conn)
+                .expect("Error saving owned recipes");
+    }
+}
+
+impl NewOwnedItem for NewOwnedart {
+    fn batch_create(conn: &SqliteConnection, records: Vec<NewOwnedart>) {
+        use schema::ownedarts;
+        diesel::insert_into(ownedarts::table).values(&records).execute(conn)
+                .expect("Error saving owned arts");
+    }
+}
+
+
+// Generic connection function
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
 
@@ -19,75 +226,7 @@ pub fn establish_connection() -> SqliteConnection {
 }
 
 
-pub fn create_fossil<'a>(conn: &SqliteConnection, name: &'a str) -> usize {
-    use schema::fossils;
-
-    let new_fossil = NewFossil {
-        name: name,
-    };
-
-    diesel::insert_into(fossils::table)
-        .values(&new_fossil)
-        .execute(conn)
-        .expect("Error saving new fossil")
-}
-
-pub fn create_user<'a>(conn: &SqliteConnection, n: &'a str, a: &'a str) -> usize {
-    use schema::users;
-
-    let new_user = NewUser {
-        username: n,
-        alias: a
-    };
-
-    diesel::insert_into(users::table)
-        .values(&new_user)
-        .execute(conn)
-        .expect("Error saving new user")
-}
-
-pub fn create_recipe<'a>(conn: &SqliteConnection, name: &'a str) -> usize {
-    use schema::recipes;
-
-    let new_recipe = NewRecipe {
-        name: name
-    };
-
-    diesel::insert_into(recipes::table)
-        .values(&new_recipe)
-        .execute(conn)
-        .expect("Error saving new recipe")
-}
-
-pub fn create_ownedfossil(conn: &SqliteConnection, u: i32, f: i32, e: i32) -> usize {
-    use schema::ownedfossils;
-
-    let new_of = NewOwnedfossil {
-        user_id: u,
-        fossil_id: f,
-        extra: e
-    };
-
-    diesel::insert_into(ownedfossils::table)
-        .values(&new_of)
-        .execute(conn)
-        .expect("Error saving owned fossil")
-}
-
-pub fn create_ownedrecipe(conn: &SqliteConnection, u: i32, r: i32) -> usize {
-    use schema::ownedrecipes;
-
-    let new_or = NewOwnedrecipe {
-        user_id: u,
-        recipe_id: r
-    };
-
-    diesel::insert_into(ownedrecipes::table)
-        .values(&new_or)
-        .execute(conn)
-        .expect("Error saving owned recipe")
-}
-
+// User manipulation functions
 pub fn get_uid_from_uname(conn: &SqliteConnection, name: &str) -> i32 {
     use schema::users::dsl::*;
     let uid = users.filter(username.eq(name)).select(id).first(conn);
@@ -106,24 +245,6 @@ pub fn get_user_from_uname(conn: &SqliteConnection, name: &str) -> User {
     }
 }
 
-pub fn count_owned_fossils(conn: &SqliteConnection, uid: i32) -> i64 {
-    use schema::ownedfossils::dsl::*;
-    let c = ownedfossils.filter(user_id.eq(uid)).count().get_result(conn);
-    match c {
-        Ok(x) => x,
-        Err(_) => 0
-    }
-}
-
-pub fn count_owned_recipes(conn: &SqliteConnection, uid: i32) -> i64 {
-    use schema::ownedrecipes::dsl::*;
-    let c = ownedrecipes.filter(user_id.eq(uid)).count().get_result(conn);
-    match c {
-        Ok(x) => x,
-        Err(_) => 0
-    }
-}
-
 pub fn set_user_alias(conn: &SqliteConnection, uid: i32, a: &str) -> bool {
     use schema::users::dsl::*;
     let res = diesel::update(users.find(uid))
@@ -134,67 +255,3 @@ pub fn set_user_alias(conn: &SqliteConnection, uid: i32, a: &str) -> bool {
         Err(_) => false
     }
 }
-
-pub fn load_users(conn: &SqliteConnection) -> Vec<User> {
-    use schema::users::dsl::*;
-    users.load::<User>(conn).expect("Error loading users")
-}
-
-pub fn load_fossils(conn: &SqliteConnection) -> Vec<Fossil> {
-    use schema::fossils::dsl::*;
-    fossils.load::<Fossil>(conn).expect("Error loading fossils")
-}
-
-pub fn load_owned_fossils(conn: &SqliteConnection, uid: i32) -> Vec<Ownedfossil> {
-    use schema::ownedfossils::dsl::*;
-    ownedfossils
-        .filter(user_id.eq(uid))
-        .load::<Ownedfossil>(conn)
-        .expect("Error loading owned fossils")
-}
-
-pub fn load_all_owned_fossils(conn: &SqliteConnection) -> Vec<Ownedfossil> {
-    use schema::ownedfossils::dsl::*;
-    ownedfossils
-        .load::<Ownedfossil>(conn)
-        .expect("Error loading all owned fossils")
-}
-
-pub fn load_recipes(conn: &SqliteConnection) -> Vec<Recipe> {
-    use schema::recipes::dsl::*;
-    recipes.load::<Recipe>(conn).expect("Error loading recipes")
-}
-
-pub fn load_owned_recipes(conn: &SqliteConnection, uid: i32) -> Vec<Ownedrecipe> {
-    use schema::ownedrecipes::dsl::*;
-    ownedrecipes
-        .filter(user_id.eq(uid))
-        .load::<Ownedrecipe>(conn)
-        .expect("Error loading owned recipes")
-}
-
-pub fn load_all_owned_recipes(conn: &SqliteConnection) -> Vec<Ownedrecipe> {
-    use schema::ownedrecipes::dsl::*;
-    ownedrecipes
-        .load::<Ownedrecipe>(conn)
-        .expect("Error loading all owned recipes")
-}
-
-pub fn batch_ownedfossils(conn: &SqliteConnection, records: Vec<NewOwnedfossil>) {
-    use schema::ownedfossils;
-    diesel::insert_into(ownedfossils::table)
-        .values(&records)
-        .execute(conn)
-        .expect("Error saving owned fossils");
-}
-
-pub fn update_owned(conn: &SqliteConnection, records: Vec<(i32, i32)>) {
-    use schema::ownedfossils::dsl::*;
-    for x in records {
-        diesel::update(ownedfossils.find(x.0))
-                .set(extra.eq(x.1))
-                .execute(conn)
-                .expect("Error updating owned fossil");
-    }
-}
-
