@@ -255,3 +255,22 @@ pub fn set_user_alias(conn: &SqliteConnection, uid: i32, a: &str) -> bool {
         Err(_) => false
     }
 }
+
+pub fn load_users(conn: &SqliteConnection) -> Vec<User> {
+    use schema::users::dsl::*;
+    users.load::<User>(conn).expect("Error loading users")
+}
+
+pub fn create_user<'a>(conn: &SqliteConnection, n: &'a str, a: &'a str) -> usize {
+    use schema::users;
+
+    let new_user = NewUser {
+        username: n,
+        alias: a
+    };
+
+    diesel::insert_into(users::table)
+        .values(&new_user)
+        .execute(conn)
+        .expect("Error saving new user")
+}
