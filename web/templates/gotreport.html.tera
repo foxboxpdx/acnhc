@@ -1,3 +1,5 @@
+{% extends "base" %}
+{% block content %}
 <style>
 div.got {
   background-color: #aaffaa;
@@ -17,30 +19,25 @@ div.linerow {
     <div class="row">
         <div class="panel panel-info">
             <div class="panel-heading">
-              <% if user.alias.eql?('0') %>
-                <h1 class="panel-title">User <%=user.username%> - Needed Fossils</h1>
-              <% else %>
-                <h1 class="panel-title"><%=user.alias%> - Needed Fossils</h1>
-              <% end %>
+              <h1 class="panel-title">Who's got what you need?</h1>
             </div>
             <div class="panel-body" id="metadata" style="display: block;">
               <div class="row linerow">
-                <div class="col-md-3"><h3>Fossil Name</h3></div>
+                <div class="col-md-3"><h3>Item Name</h3></div>
                 <div class="col-md-3"><h3>Who's got it?</h3></div>
                 <div class="col-md-6">&nbsp;</div>
               </div>
-              <% data.each do |d| %>
+              {% for fos, who in map %}
               <div class="row linerow">
-                <div class="col-md-3"><%=d.fossil%></div>
-                <% if d.user.length.eql?(0) %>
-                  <div class="col-md-3 not">Sorry, nobody got it</div>
-                <% else %>
-                  <div class="col-md-3 got"><%=d.user.join(' - ')%></div>
-                <% end %>
+                <div class="col-md-3">{{fos}}</div>
+                <div class="col-md-3 got">
+                  {{ who | join(sep=", ") }}
+                </div>
                 <div class="col-md-6">&nbsp;</div>
               </div>
-              <% end %>
+              {% endfor %}
             </div>
         </div>
     </div>
 </div>
+{% endblock content %}

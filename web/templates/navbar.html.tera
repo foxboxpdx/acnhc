@@ -8,7 +8,7 @@
       <span class="icon-bar"></span>
       </button>
       <div class="panel-heading">
-        <h1 class="panel-title">ACNH Catalog v0.2.25rs</h1>
+        <h1 class="panel-title">ACNH Catalog v0.6.219rs</h1>
       </div>
     </div>
     <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
@@ -20,11 +20,11 @@
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu forAnimate" role="menu">
-            <li><a href="/fossil/report">My Fossil Report</a></li>
-            <li><a href="/fossil/edit">Edit Fossils</a></li>
-            <li><a href="/fossil/allreport">All Users Report</a></li>
-            <li><a href="/fossil/whogot">Who has what you need?</a></li>
-            <li><a href="/fossil/whoneed">Who needs what you got?</a></li>
+            <li><a href="/report/fossil">My Fossil Report</a></li>
+            <li><a href="/edit/fossil">Edit Fossils</a></li>
+            <li><a href="/allreport/fossil">All Users Report</a></li>
+            <li><a href="/whogot/fossil">Who has what you need?</a></li>
+            <li><a href="/whoneed/fossil">Who needs what you got?</a></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -32,11 +32,23 @@
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu forAnimate" role="menu">
-            <li><a href="/recipe/report">My Recipe Report</a></li>
-            <li><a href="/recipe/edit">Edit Recipes</a></li>
-            <li><a href="/recipe/allreport">All Users Report</a></li>
-            <li><a href="/recipe/whogot">Who has what you need?</a></li>
-            <li><a href="/recipe/whoneed">Who needs what you got?</a></li>
+            <li><a href="/report/recipe">My Recipe Report</a></li>
+            <li><a href="/edit/recipe">Edit Recipes</a></li>
+            <li><a href="/allreport/recipe">All Users Report</a></li>
+            <li><a href="/whogot/recipe">Who has what you need?</a></li>
+            <li><a href="/whoneed/recipe">Who needs what you got?</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Artwork
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu forAnimate" role="menu">
+            <li><a href="/report/art">My Artwork Report</a></li>
+            <li><a href="/edit/art">Edit Artwork</a></li>
+            <li><a href="/allreport/art">All Users Report</a></li>
+            <li><a href="/whogot/art">Who has what you need?</a></li>
+            <li><a href="/whoneed/art">Who needs what you got?</a></li>
           </ul>
         </li>
       </ul>

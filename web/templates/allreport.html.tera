@@ -12,7 +12,7 @@ div.not {
  <div class="row">
   <div class="panel panel-info">
    <div class="panel-heading">
-    <h3>All Users Fossil Report</h3>
+    <h3>All Users Item Report</h3>
    </div>
    <div class="panel-body">
     {% for u in users %}
@@ -20,13 +20,13 @@ div.not {
     <div class="row">
         <div class="panel panel-info">
             <div class="panel-heading">
-              <h1 class="panel-title">{{u.alias}}'s Fossil Report</h1>
+              <h1 class="panel-title">{{u.alias}}'s Item Report</h1>
             </div>
             <div class="panel-body" id="metadata" style="display: block;">
               <div class="row">
               {% set counter = 0 %}
-              {% for fossil in fossils %}
-                {% set of = owned | filter(attribute="fossil_id", value=fossil.id) | first %}
+              {% for item in items %}
+                {% set of = owned | filter(attribute="item_id", value=item.id) | first %}
                 {% if of is string %}
                   {% set x = "not" %}
                   {% set y = 0 %}
@@ -35,7 +35,7 @@ div.not {
                   {% set y = of.extra %}
                 {% endif %}
                 <div class="col-md-2 {{x}}">
-                  {{fossil.name}} <b>({{y}})</b>
+                  {{item.name}} <b>({{y}})</b>
                 </div>
                 {% set counter = counter + 1 %}
                 {% if counter == 6 %}

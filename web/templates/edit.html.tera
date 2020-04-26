@@ -29,13 +29,13 @@ div.row {
         <div class="panel panel-info">
             <div class="panel-heading">
               {% if user.alias == "None" %}
-                <h1 class="panel-title">User {{user.username}}'s Fossils</h1>
+                <h1 class="panel-title">User {{user.username}}'s Items</h1>
               {% else %}
-                <h1 class="panel-title">{{user.alias}}'s Fossils</h1>
+                <h1 class="panel-title">{{user.alias}}'s Items</h1>
               {% endif %}
             </div>
             <div class="panel-body" id="metadata" style="display: block;">
-            <form action="/save/fossil" method="POST" onsubmit='return ftoj(this)'>
+            <form action="/save/item" method="POST" onsubmit='return ftoj(this)'>
               <input type="hidden" id="oj" name="oj" value=""/>
               <input type="hidden" id="xj" name="xj" value=""/>
               <div class="row">
@@ -46,37 +46,37 @@ div.row {
                   <h3>Extras?</h3>
                 </div>
                 <div class="col-md-8">
-                  <h3>Fossil Name</h3>
+                  <h3>Item Name</h3>
                 </div>
               </div>
-              {% for fossil in fossils %}
+              {% for item in items %}
                 <div class="row">
-                {# Need to do a find in the Ownedfossil vec to see if this user #}
-                {# owns this particular fossil. #}
-                {% set ofossil = owned | filter(attribute="fossil_id", value=fossil.id) | first %}
-                {# If this works, ofossil will be either an empty string, or #}
-                {# the matching Ownedfossil.  We can easily test if for the former #}
-                {% if ofossil is string %}
-                  {# So this user doesn't own this fossil. Set the checkbox to #}
+                {# Need to do a find in the Owneditem vec to see if this user #}
+                {# owns this particular item. #}
+                {% set oitem = owned | filter(attribute="item_id", value=item.id) | first %}
+                {# If this works, oitem will be either an empty string, or #}
+                {# the matching Owneditem.  We can easily test if for the former #}
+                {% if oitem is string %}
+                  {# So this user doesn't own this item. Set the checkbox to #}
                   {# to unchecked and the extras to 0 #}
                   <div class="col-md-2">
-                   <input type="checkbox" value="{{fossil.id}}" name="owned">
+                   <input type="checkbox" value="{{item.id}}" name="owned">
                   </div>
                   <div class="col-md-2">
-                    <input type="text" size="2" id="{{fossil.id}}" name="extra" value="0"/>
+                    <input type="text" size="2" id="{{item.id}}" name="extra" value="0"/>
                   </div>
                 {% else %}
                   {# If its not a string it should be a struct so set the #}
-                  {# radio button to true and the extras ofossil.extras #}
+                  {# radio button to true and the extras oitem.extras #}
                   <div class="col-md-2">
-                    <input type="checkbox" value="{{fossil.id}}" name="owned" checked>
+                    <input type="checkbox" value="{{item.id}}" name="owned" checked>
                   </div>
                   <div class="col-md-2">
-                    <input type="text" size="2" name="extra" id="{{fossil.id}}" value="{{ofossil.extra}}"/>
+                    <input type="text" size="2" name="extra" id="{{item.id}}" value="{{oitem.extra}}"/>
                   </div>
                 {% endif %}
                 <div class="col-md-8">
-                  <h4>{{fossil.name}}</h4>
+                  <h4>{{item.name}}</h4>
                 </div>
                </div>
              {% endfor %}
