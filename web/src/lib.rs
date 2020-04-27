@@ -50,10 +50,13 @@ pub struct UserContext {
 // Index/main context
 #[derive(Serialize)]
 pub struct IndexContext {
-    pub user:    String,
+    pub user:    User,
     pub fossils: i64,
     pub recipes: i64,
-    pub arts:    i64
+    pub arts:    i64,
+    pub ftot:    i64,
+    pub rtot:    i64,
+    pub atot:    i64
 }
 
 // btreemap context

@@ -34,11 +34,11 @@ div.not {
                   {% set x = "got" %}
                   {% set y = of.extra %}
                 {% endif %}
-                <div class="col-md-2 {{x}}">
+                <div class="col-md-3 {{x}}">
                   {{item.name}} <b>({{y}})</b>
                 </div>
                 {% set counter = counter + 1 %}
-                {% if counter == 6 %}
+                {% if counter == 4 %}
                   {% set counter = 0 %}
                   </div><div class="row">
                 {% endif %}

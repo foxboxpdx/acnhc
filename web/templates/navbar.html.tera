@@ -13,7 +13,7 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/">Login Link</a></li>
+        <li class="active"><a href="/">Home</a></li>
         <li><a href="/alias">Set account alias</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fossils
@@ -22,7 +22,7 @@
           <ul class="dropdown-menu forAnimate" role="menu">
             <li><a href="/report/fossil">My Fossil Report</a></li>
             <li><a href="/edit/fossil">Edit Fossils</a></li>
-            <li><a href="/allreport/fossil">All Users Report</a></li>
+            <li><a href="/all/fossil">All Users Report</a></li>
             <li><a href="/whogot/fossil">Who has what you need?</a></li>
             <li><a href="/whoneed/fossil">Who needs what you got?</a></li>
           </ul>
@@ -34,7 +34,7 @@
           <ul class="dropdown-menu forAnimate" role="menu">
             <li><a href="/report/recipe">My Recipe Report</a></li>
             <li><a href="/edit/recipe">Edit Recipes</a></li>
-            <li><a href="/allreport/recipe">All Users Report</a></li>
+            <li><a href="/all/recipe">All Users Report</a></li>
             <li><a href="/whogot/recipe">Who has what you need?</a></li>
             <li><a href="/whoneed/recipe">Who needs what you got?</a></li>
           </ul>
@@ -46,7 +46,7 @@
           <ul class="dropdown-menu forAnimate" role="menu">
             <li><a href="/report/art">My Artwork Report</a></li>
             <li><a href="/edit/art">Edit Artwork</a></li>
-            <li><a href="/allreport/art">All Users Report</a></li>
+            <li><a href="/all/art">All Users Report</a></li>
             <li><a href="/whogot/art">Who has what you need?</a></li>
             <li><a href="/whoneed/art">Who needs what you got?</a></li>
           </ul>

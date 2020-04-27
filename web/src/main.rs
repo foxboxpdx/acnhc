@@ -68,13 +68,14 @@ fn index(conn: Conn, cookies: Cookies) -> Template {
         let x = EmptyContext {};
         Template::render("login", &x);
     }
-    let fcount = Ownedfossil::count(&*conn, user.id);
-    let rcount = Ownedrecipe::count(&*conn, user.id);
-    let acount = Ownedart::count(&*conn, user.id);
-    let context = IndexContext { user: user.username.to_string(),
-                                 fossils: fcount,
-                                 recipes: rcount,
-                                 arts: acount };
+    let f  = Ownedfossil::count(&*conn, user.id);
+    let r  = Ownedrecipe::count(&*conn, user.id);
+    let a  = Ownedart::count(&*conn, user.id);
+    let ft = Fossil::count(&*conn);
+    let rt = Recipe::count(&*conn);
+    let at = Art::count(&*conn);
+    let context = IndexContext { user: user, fossils: f, recipes: r, arts: a,
+                                 ftot: ft, rtot: rt, atot: at };
     // Should be good to render the status/index page
     Template::render("index", &context)
 }
@@ -90,6 +91,12 @@ fn alias(conn: Conn, cookies: Cookies) -> Template {
 fn setalias(conn: Conn, alias: Form<Alias>) -> Redirect {
     let id: i32 = alias.id.parse().unwrap();
     set_user_alias(&*conn, id, &alias.alias);
+    Redirect::to("/")
+}
+
+#[get("/uuid/<uuid>")]
+fn uuidlogin(mut cookies: Cookies, uuid: String) -> Redirect {
+    cookies.add(Cookie::new("userid", uuid));
     Redirect::to("/")
 }
 
@@ -260,7 +267,7 @@ fn asave() {}
 // LAUNCH DAT THING
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
-        .mount("/", routes![index, dologin, login, newuser, alias, setalias])
+        .mount("/", routes![index, dologin, login, newuser, alias, setalias, uuidlogin])
         .mount("/", StaticFiles::from("public"))
         .mount("/edit", routes![edit])
         .mount("/report", routes![report])

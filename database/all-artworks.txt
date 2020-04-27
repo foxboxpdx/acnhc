@@ -36,5 +36,6 @@ Twinkling Painting
 Valiant Statue
 Warm Painting
 Warrior Statue
-Wild Painting
+Wild Painting (Left half)
+Wild Painting (Right half)
 Wistful Painting

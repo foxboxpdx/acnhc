@@ -14,6 +14,7 @@ use self::models::*;
 pub trait Item {
     fn create<'a>(conn: &SqliteConnection, name: &'a str) -> usize;
     fn load(conn: &SqliteConnection) -> Vec<Self> where Self: Sized;
+    fn count(conn: &SqliteConnection) -> i64;
 }
 
 impl Item for Fossil {
@@ -27,6 +28,12 @@ impl Item for Fossil {
     fn load(conn: &SqliteConnection) -> Vec<Fossil> {
         use schema::fossils::dsl::*;
         fossils.load::<Fossil>(conn).expect("Error loading fossils")
+    }
+
+    fn count(conn: &SqliteConnection) -> i64 {
+        use schema::fossils::dsl::*;
+        let c = fossils.count().get_result(conn);
+        match c { Ok(x) => x, Err(_) => 0 }
     }
 }
 
@@ -42,6 +49,12 @@ impl Item for Recipe {
         use schema::recipes::dsl::*;
         recipes.load::<Recipe>(conn).expect("error loading recipes")
     }
+
+    fn count(conn: &SqliteConnection) -> i64 {
+        use schema::recipes::dsl::*;
+        let c = recipes.count().get_result(conn);
+        match c { Ok(x) => x, Err(_) => 0 }
+    }
 }
 
 impl Item for Art {
@@ -55,6 +68,12 @@ impl Item for Art {
     fn load(conn: &SqliteConnection) -> Vec<Art> {
         use schema::arts::dsl::*;
         arts.load::<Art>(conn).expect("Error loading art")
+    }
+
+    fn count(conn: &SqliteConnection) -> i64 {
+        use schema::arts::dsl::*;
+        let c = arts.count().get_result(conn);
+        match c { Ok(x) => x, Err(_) => 0 }
     }
 }
 

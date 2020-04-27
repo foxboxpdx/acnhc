@@ -4,16 +4,25 @@
   <div class="row">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <h1 class="panel-title">Catalog Status for {{ user }}</h1>
+        <h1 class="panel-title">Catalog Status - UUID {{ user.username }} - 
+        Alias {{ user.alias }}</h1>
       </div>
       <div class="panel-body" id="metadata" style="display: block;">
         <div class="row">
-          <div class="col-md-6">
-            <h3>Fossils: {{ fossils }} / 73</h3>
+          <div class="col-md-4">
+            <h3>Fossils: {{ fossils }} / {{ ftot }}</h3>
           </div>
-          <div class="col-md-6">
-            <h3>Recipes: {{ recipes }} / 568</h3>
+          <div class="col-md-4">
+            <h3>Recipes: {{ recipes }} / {{ rtot }}</h3>
           </div>
+          <div class="col-md-4">
+            <h3>Artwork: {{ arts }} / {{ atot }}</h3>
+          </div>
+        </div>
+        <div class="row">
+         <div class="col-md-12">
+           Login link: <a href="/uuid/{{ user.username }}">Bookmark me!</a>
+         </div>
         </div>
       </div>
     </div>
