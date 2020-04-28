@@ -62,7 +62,8 @@ pub struct IndexContext {
 // btreemap context
 #[derive(Serialize)]
 pub struct MapContext {
-    pub map: BTreeMap<String, Vec<String>>
+    pub map: BTreeMap<String, Vec<String>>,
+    pub itype: String
 }
 
 // Single user data
@@ -71,6 +72,7 @@ pub struct SelfContext<T, U> where T: Item, U: OwnedItem {
     pub user:  User,
     pub items: Vec<T>,
     pub owned: Vec<U>,
+    pub itype: String
 }
 
 // All user data
@@ -79,6 +81,7 @@ pub struct AllContext<T, U> where T: Item, U: OwnedItem {
     pub users: Vec<User>,
     pub items: Vec<T>,
     pub owned: Vec<U>,
+    pub itype: String
 }
 
 // Helper functions

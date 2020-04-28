@@ -26,7 +26,8 @@ div.not {
               <div class="row">
               {% set counter = 0 %}
               {% for item in items %}
-                {% set of = owned | filter(attribute="item_id", value=item.id) | first %}
+                {% set oid = owned | filter(attribute="user_id", value=u.id) %}
+                {% set of = oid | filter(attribute="item_id", value=item.id) | first %}
                 {% if of is string %}
                   {% set x = "not" %}
                   {% set y = 0 %}

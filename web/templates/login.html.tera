@@ -19,10 +19,10 @@
         <br/>
         If you already have a user, please enter your 32-character UUID below 
         and click the 'Login' button.  For faster logins in the future, bookmark
-        the 'login link' in the navigation bar to skip this screen.
+        the login link on the main status page.
         <br/>
         <form action='/dologin' method='POST'>
-        <input type='text' name='user_id' size='50' />
+        <input type='text' name='id' size='50' />
         <button type="button" class="btn btn-sm btn-primary" onClick="submit();">Login</button>
         </form>
         <br/>

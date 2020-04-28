@@ -251,7 +251,7 @@ pub fn get_uid_from_uname(conn: &SqliteConnection, name: &str) -> i32 {
     let uid = users.filter(username.eq(name)).select(id).first(conn);
     match uid {
         Ok(x) => x,
-        Err(_) => 0
+        Err(_) => -1
     }
 }
 
@@ -260,7 +260,7 @@ pub fn get_user_from_uname(conn: &SqliteConnection, name: &str) -> User {
     let user = users.filter(username.eq(name)).first(conn);
     match user {
         Ok(x) => x,
-        Err(_) => User { id: 0, username: "0".to_string(), alias: "0".to_string() }
+        Err(_) => User { id: -2, username: "-2".to_string(), alias: "-2".to_string() }
     }
 }
 

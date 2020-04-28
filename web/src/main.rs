@@ -34,10 +34,22 @@ fn dologin(mut cookies: Cookies, userid: Form<Userid>) -> Redirect {
     Redirect::to("/")
 }
 
+#[get("/logout")]
+fn logout(mut cookies: Cookies) -> Redirect {
+    cookies.remove(Cookie::named("userid"));
+    Redirect::to("/login")
+}
+
 #[get("/login")]
 fn login() -> Template {
     let context = EmptyContext{};
     Template::render("login", &context)
+}
+
+#[get("/uuid?<uuidstr>")]
+fn uuidlogin(mut cookies: Cookies, uuidstr: String) -> Redirect {
+    cookies.add(Cookie::new("userid", uuidstr));
+    Redirect::to("/")
 }
 
 #[post("/newuser")]
@@ -61,12 +73,9 @@ fn newuser(conn: Conn, mut cookies: Cookies) -> Redirect {
 #[get("/")]
 fn index(conn: Conn, cookies: Cookies) -> Template {
     let user = jamie_please(&conn, &cookies);
-    // If user.id is 0 assume it's because the cookie is unset or we were
-    // unable to find that user in the database.  And hope it's not a DB
-    // error because lmao
-    if user.id == 0 {
+    if user.id < 0 {
         let x = EmptyContext {};
-        Template::render("login", &x);
+        return Template::render("login", &x);
     }
     let f  = Ownedfossil::count(&*conn, user.id);
     let r  = Ownedrecipe::count(&*conn, user.id);
@@ -94,77 +103,75 @@ fn setalias(conn: Conn, alias: Form<Alias>) -> Redirect {
     Redirect::to("/")
 }
 
-#[get("/uuid/<uuid>")]
-fn uuidlogin(mut cookies: Cookies, uuid: String) -> Redirect {
-    cookies.add(Cookie::new("userid", uuid));
-    Redirect::to("/")
-}
-
 // Item routes
+// /edit/<item>
 #[get("/<item>")]
 fn edit(item: String, conn: Conn, cookies: Cookies) -> Template {
     match item.as_str() {
         "fossil" =>  {
             let (x, y, z) = get_fossil_data(&conn, &cookies, false);
-            let c = SelfContext{ user: x, items: y, owned: z };
+            let c = SelfContext{ user: x, items: y, owned: z, itype: item };
             Template::render("edit", &c)
         },
         "recipe" =>  { 
             let (x, y, z) = get_recipe_data(&conn, &cookies, false);
-            let c = SelfContext{ user: x, items: y, owned: z };
+            let c = SelfContext{ user: x, items: y, owned: z, itype: item };
             Template::render("edit", &c)
         },
         "art" | _ => { 
             let (x, y, z) = get_art_data(&conn, &cookies, false);
-            let c = SelfContext{ user: x, items: y, owned: z };
+            let c = SelfContext{ user: x, items: y, owned: z, itype: item };
             Template::render("edit", &c)
         }
     }
 }
 
+// /report/<item>
 #[get("/<item>")]
 fn report(item: String, conn: Conn, cookies: Cookies) -> Template {
     match item.as_str() {
         "fossil" =>  {
             let (x, y, z) = get_fossil_data(&conn, &cookies, false);
-            let c = SelfContext{ user: x, items: y, owned: z };
+            let c = SelfContext{ user: x, items: y, owned: z, itype: item };
             Template::render("report", &c)
         },
         "recipe" =>  {
             let (x, y, z) = get_recipe_data(&conn, &cookies, false);
-            let c = SelfContext{ user: x, items: y, owned: z };
+            let c = SelfContext{ user: x, items: y, owned: z, itype: item };
             Template::render("report", &c)
         },
         "art" | _ => {
             let (x, y, z) = get_art_data(&conn, &cookies, false);
-            let c = SelfContext{ user: x, items: y, owned: z };
+            let c = SelfContext{ user: x, items: y, owned: z, itype: item };
             Template::render("report", &c)
         }
     }
 }
 
+// /all/<item>
 #[get("/<item>")]
 fn all(item: String, conn: Conn, cookies: Cookies) -> Template {
     let users = load_users(&*conn);
     match item.as_str() {
         "fossil" =>  {
             let (_, y, z) = get_fossil_data(&conn, &cookies, true);
-            let c = AllContext{ users: users, items: y, owned: z };
+            let c = AllContext{ users: users, items: y, owned: z, itype: item };
             Template::render("allreport", &c)
         },
         "recipe" =>  {
             let (_, y, z) = get_recipe_data(&conn, &cookies, true);
-            let c = AllContext{ users: users, items: y, owned: z };
+            let c = AllContext{ users: users, items: y, owned: z, itype: item };
             Template::render("allreport", &c)
         },
         "art" | _ => {
             let (_, y, z) = get_art_data(&conn, &cookies, true);
-            let c = AllContext{ users: users, items: y, owned: z };
+            let c = AllContext{ users: users, items: y, owned: z, itype: item };
             Template::render("allreport", &c)
         }
     }
 }
 
+// /whogot/<item>
 #[get("/<item>")]
 fn whogot(item: String, conn: Conn, cookies: Cookies) -> Template {
     let users = load_users(&*conn);
@@ -172,25 +179,25 @@ fn whogot(item: String, conn: Conn, cookies: Cookies) -> Template {
         "fossil" =>  {
             let (x, y, z) = get_fossil_data(&conn, &cookies, true);
             let c = got_f(x, users, y, z);
-            let context = MapContext { map: c };
+            let context = MapContext { map: c, itype: item };
             Template::render("gotreport", &context)
         },
         "recipe" =>  {
             let (x, y, z) = get_recipe_data(&conn, &cookies, true);
             let c = got_r(x, users, y, z);
-            let context = MapContext { map: c };
+            let context = MapContext { map: c, itype: item };
             Template::render("gotreport", &context)
         },
         "art" | _ => {
             let (x, y, z) = get_art_data(&conn, &cookies, true);
             let c = got_a(x, users, y, z);
-            let context = MapContext { map: c };
+            let context = MapContext { map: c, itype: item };
             Template::render("gotreport", &context)
         }
     }
 }
 
-
+// /whoneed/<item>
 #[get("/<item>")]
 fn whoneed(item: String, conn: Conn, cookies: Cookies) -> Template {
     let users = load_users(&*conn);
@@ -198,19 +205,19 @@ fn whoneed(item: String, conn: Conn, cookies: Cookies) -> Template {
         "fossil" =>  {
             let (x, y, z) = get_fossil_data(&conn, &cookies, true);
             let c = need_f(x, users, y, z);
-            let context = MapContext { map: c };
+            let context = MapContext { map: c, itype: item };
             Template::render("needreport", &context)
         },
         "recipe" =>  {
             let (x, y, z) = get_recipe_data(&conn, &cookies, true);
             let c = need_r(x, users, y, z);
-            let context = MapContext { map: c };
+            let context = MapContext { map: c, itype: item };
             Template::render("needreport", &context)
         },
         "art" | _ => {
             let (x, y, z) = get_art_data(&conn, &cookies, true);
             let c =need_a(x, users, y, z);
-            let context = MapContext { map: c };
+            let context = MapContext { map: c, itype: item };
             Template::render("needreport", &context)
         }
     }
@@ -267,7 +274,7 @@ fn asave() {}
 // LAUNCH DAT THING
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
-        .mount("/", routes![index, dologin, login, newuser, alias, setalias, uuidlogin])
+        .mount("/", routes![index, dologin, login, newuser, alias, setalias, uuidlogin, logout])
         .mount("/", StaticFiles::from("public"))
         .mount("/edit", routes![edit])
         .mount("/report", routes![report])
@@ -306,7 +313,7 @@ fn jamie_please(conn: &Conn, cookies: &Cookies) -> User {
         let uname = cookie.value().to_string();
         get_user_from_uname(&*conn, &uname)
     } else {
-        User { id: 0, username: "0".to_string(), alias: "0".to_string() }
+        User { id: -1, username: "-1".to_string(), alias: "-1".to_string() }
     }
 }
 

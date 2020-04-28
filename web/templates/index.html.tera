@@ -21,7 +21,7 @@
         </div>
         <div class="row">
          <div class="col-md-12">
-           Login link: <a href="/uuid/{{ user.username }}">Bookmark me!</a>
+           Login link: <a href="/uuid?uuidstr={{ user.username }}">Bookmark me!</a>
          </div>
         </div>
       </div>

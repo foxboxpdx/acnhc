@@ -51,6 +51,7 @@
             <li><a href="/whoneed/art">Who needs what you got?</a></li>
           </ul>
         </li>
+        <li><a href="/logout">Log out</a></li>
       </ul>
     </div>
   </div>

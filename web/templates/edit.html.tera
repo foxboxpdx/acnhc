@@ -29,13 +29,13 @@ div.row {
         <div class="panel panel-info">
             <div class="panel-heading">
               {% if user.alias == "None" %}
-                <h1 class="panel-title">User {{user.username}}'s Items</h1>
+                <h1 class="panel-title">User {{user.username}}'s {{itype}}s</h1>
               {% else %}
-                <h1 class="panel-title">{{user.alias}}'s Items</h1>
+                <h1 class="panel-title">{{user.alias}}'s {{itype}}s</h1>
               {% endif %}
             </div>
             <div class="panel-body" id="metadata" style="display: block;">
-            <form action="/save/item" method="POST" onsubmit='return ftoj(this)'>
+            <form action="/save/{{itype}}" method="POST" onsubmit='return ftoj(this)'>
               <input type="hidden" id="oj" name="oj" value=""/>
               <input type="hidden" id="xj" name="xj" value=""/>
               <div class="row">

@@ -1,6 +1,6 @@
 [package]
 name = "acnhc-web"
-version = "0.6.219"
+version = "0.6.273"
 authors = ["Fox Box <foxboxpdx@gmail.com>"]
 edition = "2018"
 
