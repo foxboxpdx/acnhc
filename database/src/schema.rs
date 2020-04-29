@@ -43,6 +43,14 @@ table! {
     recipes (id) {
         id -> Integer,
         name -> Text,
+        type_id -> Integer,
+    }
+}
+
+table! {
+    recipetypes (id) {
+        id -> Integer,
+        name -> Text,
     }
 }
 
@@ -61,5 +69,6 @@ allow_tables_to_appear_in_same_query!(
     ownedfossils,
     ownedrecipes,
     recipes,
+    recipetypes,
     users,
 );

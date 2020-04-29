@@ -2,7 +2,6 @@ extern crate acnhc_db;
 extern crate diesel;
 
 use self::acnhc_db::*;
-use self::acnhc_db::models::*;
 use std::env;
 use std::fs;
 
@@ -14,15 +13,15 @@ fn main() {
     let contents = fs::read_to_string(filename)
         .expect("Couldn't read file");
 
-    let mut fossils: Vec<&str> = contents.split("\n").collect();
-    let _ = fossils.pop();
+    let mut recipetypes: Vec<&str> = contents.split("\n").collect();
+    let _ = recipetypes.pop();
 
     // Connect to DB and dump the contents in
     let connection = establish_connection();
 
-    for name in fossils.iter() {
-        let _ = Fossil::create(&connection, name);
-        println!("\nSaved fossil {}", name);
+    for name in recipetypes.iter() {
+        let _ = create_recipetype(&connection, name);
+        println!("\nSaved recipetype {}", name);
     }
 }
 

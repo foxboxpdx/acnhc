@@ -40,7 +40,7 @@ impl Item for Fossil {
 impl Item for Recipe {
     fn create<'a>(conn: &SqliteConnection, name: &'a str) -> usize {
         use schema::recipes;
-        let new_r = NewRecipe { name: name };
+        let new_r = NewRecipe { name: name, type_id: 0 };
         diesel::insert_into(recipes::table).values(&new_r).execute(conn)
                 .expect("error saving new recipe")
     }
@@ -293,3 +293,12 @@ pub fn create_user<'a>(conn: &SqliteConnection, n: &'a str, a: &'a str) -> usize
         .execute(conn)
         .expect("Error saving new user")
 }
+
+// Stuff for recipe types
+pub fn create_recipetype<'a>(conn: &SqliteConnection, name: &'a str) -> usize {
+    use schema::recipetypes;
+    let x = NewRecipetype { name: name };
+    diesel::insert_into(recipetypes::table).values(&x).execute(conn)
+        .expect("Error saving new recipe type")
+}
+

@@ -46,13 +46,27 @@ pub struct NewOwnedfossil {
 #[derive(Identifiable, Queryable, Serialize)]
 pub struct Recipe {
     pub id: i32,
-    pub name: String
+    pub name: String,
+    pub type_id: i32
 }
 
 #[derive(Insertable)]
 #[table_name="recipes"]
 pub struct NewRecipe<'a> {
     pub name: &'a str,
+    pub type_id: i32
+}
+
+#[derive(Identifiable, Queryable, Serialize)]
+pub struct Recipetype {
+    pub id: i32,
+    pub name: String,
+}
+
+#[derive(Insertable)]
+#[table_name="recipetypes"]
+pub struct NewRecipetype<'a> {
+    pub name: &'a str
 }
 
 #[derive(Identifiable, Queryable, AsChangeset, Serialize)]

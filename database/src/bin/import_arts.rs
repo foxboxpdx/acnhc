@@ -14,7 +14,8 @@ fn main() {
     let contents = fs::read_to_string(filename)
         .expect("Couldn't read file");
 
-    let arts: Vec<&str> = contents.split("\n").collect();
+    let mut arts: Vec<&str> = contents.split("\n").collect();
+    let _ = arts.pop();
 
     // Connect to DB and dump the contents in
     let connection = establish_connection();
