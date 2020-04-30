@@ -84,6 +84,14 @@ pub struct AllContext<T, U> where T: Item, U: OwnedItem {
     pub itype: String
 }
 
+// Recipes by type 
+#[derive(Serialize)]
+pub struct RecipeContext {
+    pub user: User,
+    pub owned: Vec<Ownedrecipe>,
+    pub recipes: BTreeMap<String, Vec<Recipe>>
+}
+
 // Helper functions
 pub fn got_f(thisuser: User, users: Vec<User>, items: Vec<Fossil>, owned: Vec<Ownedfossil>) -> BTreeMap<String, Vec<String>> {
     let mut contextmap = BTreeMap::new();

@@ -114,9 +114,9 @@ fn edit(item: String, conn: Conn, cookies: Cookies) -> Template {
             Template::render("edit", &c)
         },
         "recipe" =>  { 
-            let (x, y, z) = get_recipe_data(&conn, &cookies, false);
-            let c = SelfContext{ user: x, items: y, owned: z, itype: item };
-            Template::render("edit", &c)
+            let (x, y, z) = get_categorized_recipe_data(&conn, &cookies);
+            let c = RecipeContext{ user: x, recipes: y, owned: z };
+            Template::render("editrecipes", &c)
         },
         "art" | _ => { 
             let (x, y, z) = get_art_data(&conn, &cookies, false);
@@ -327,6 +327,15 @@ fn get_fossil_data(conn: &Conn, cookies: &Cookies, all: bool)
        true =>  { Ownedfossil::load_all(&*conn) },
        false => { Ownedfossil::load(&*conn, user.id) }
    };
+   (user, items, owned)
+}
+
+// This is more special now since we're using tabs to separate categories
+fn get_categorized_recipe_data(conn: &Conn, cookies: &Cookies)
+        -> (User, BTreeMap<String, Vec<Recipe>>, Vec<Ownedrecipe>) {
+   let user = jamie_please(&conn, &cookies);
+   let items = recipes_by_category(&*conn);
+   let owned = Ownedrecipe::load(&*conn, user.id);
    (user, items, owned)
 }
 

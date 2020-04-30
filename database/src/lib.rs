@@ -9,6 +9,7 @@ use diesel::prelude::*;
 use dotenv::dotenv;
 use std::env;
 use self::models::*;
+use std::collections::BTreeMap;
 
 // Define common functions for "Item" types
 pub trait Item {
@@ -302,3 +303,18 @@ pub fn create_recipetype<'a>(conn: &SqliteConnection, name: &'a str) -> usize {
         .expect("Error saving new recipe type")
 }
 
+// Get all recipes by category/type in a BTreeMap
+pub fn recipes_by_category(conn: &SqliteConnection) -> BTreeMap<String, Vec<Recipe>> {
+    use schema::recipetypes::dsl::*;
+    use schema::recipes::dsl::*;
+    let cats = recipetypes.load::<Recipetype>(conn).expect("Error loading types");
+    let mut retval = BTreeMap::new();
+    for c in cats {
+        let rvec = recipes.filter(type_id.eq(c.id)).load(conn);
+        match rvec {
+            Ok(x) => retval.insert(c.name.to_string(), x),
+            Err(_) => panic!("Unable to load recipes")
+        };
+    }
+    retval
+}

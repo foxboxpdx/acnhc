@@ -1,0 +1,101 @@
+{% extends "base" %}
+{% block content %}
+<style>
+div.row { 
+  border: 1px solid;
+  border-bottom: 0px;
+}
+.container div.row:last-child {
+  border-bottom: 1px solid;
+}
+</style>
+<script type="text/javascript">
+  function ftoj( form ) {
+      var ex = {};
+      var ow = {};
+      $("input[name='extra']").each(function() {
+        ex[parseInt($(this).attr('id'))] = parseInt($(this).prop('value'));
+      });
+      $("input[name='owned']").each(function() {
+          ow[$(this).attr('value')] = $(this).prop('checked');
+      });
+      document.getElementById("oj").value = JSON.stringify(ow);
+      document.getElementById("xj").value = JSON.stringify(ex);
+      return true;
+  }
+</script>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+              {% if user.alias == "None" %}
+                <h1 class="panel-title">User {{user.username}}'s Recipes
+              {% else %}
+                <h1 class="panel-title">{{user.alias}}'s Recipes
+              {% endif %}
+              <button type="submit" class="btn btn-sm btn-primary">Save</button>
+              </h1>
+            </div>
+            <div class="panel-body" id="metadata" style="display: block;">
+            <form action="/save/recipe" method="POST" onsubmit='return ftoj(this)'>
+              <input type="hidden" id="oj" name="oj" value=""/>
+              <input type="hidden" id="xj" name="xj" value=""/>
+              {# Loop once to set up the tab bar #}
+              <ul class="nav nav-tabs">
+              {% for cat, x in recipes %}
+                {% if loop.index == 1 %}
+                  <li class="active"><a data-toggle="tab" href="#{{cat}}">{{cat}}</a></li>
+                {% else %}
+                <li><a data-toggle="tab" href="#{{cat}}">{{cat}}</a></li>
+                {% endif %}
+              {% endfor %}
+              </ul>
+              <div class="tab-content">
+              {# Loop again to set up each tab panel and populate data #}
+              {% for cat, rec in recipes %}
+                {% if loop.index == 1 %}
+                <div id="{{cat}}" class="tab-pane fade in active">
+                {% else %}
+                <div id="{{cat}}" class="tab-pane fade">
+                {% endif %}
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">{{cat}} Recipes</h3>
+                    </div>
+                    <div class="panel-body">
+                      <div class="row">
+                        <div class="col-md-2"><h3>Got it?</h3></div>
+                        <div class="col-md-2"><h3>Extras?</h3></div>
+                        <div class="col-md-8"><h3>Item Name</h3></div>
+                      </div>
+                      {% for item in rec %}
+                      <div class="row">
+                        {% set oitem = owned | filter(attribute="item_id", value=item.id) | first %}
+                        {% if oitem is string %}
+                        <div class="col-md-2">
+                          <input type="checkbox" value="{{item.id}}" name="owned">
+                        </div>
+                        <div class="col-md-2">
+                          <input type="text" size="2" id="{{item.id}}" name="extra" value="0"/>
+                        </div>
+                        {% else %}
+                        <div class="col-md-2">
+                          <input type="checkbox" value="{{item.id}}" name="owned" checked>
+                        </div>
+                        <div class="col-md-2">
+                          <input type="text" size="2" name="extra" id="{{item.id}}" value="{{oitem.extra}}"/>
+                        </div>
+                        {% endif %}
+                        <div class="col-md-8"><h4>{{item.name}}</h4></div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+              </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
