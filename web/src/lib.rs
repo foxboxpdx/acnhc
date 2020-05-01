@@ -266,3 +266,4 @@ pub fn need_a(thisuser: User, users: Vec<User>, items: Vec<Art>, owned: Vec<Owne
     }
     contextmap
 }
+

@@ -136,9 +136,9 @@ fn report(item: String, conn: Conn, cookies: Cookies) -> Template {
             Template::render("report", &c)
         },
         "recipe" =>  {
-            let (x, y, z) = get_recipe_data(&conn, &cookies, false);
-            let c = SelfContext{ user: x, items: y, owned: z, itype: item };
-            Template::render("report", &c)
+            let (x, y, z) = get_categorized_recipe_data(&conn, &cookies);
+            let c = RecipeContext{ user: x, recipes: y, owned: z };
+            Template::render("reportrecipes", &c)
         },
         "art" | _ => {
             let (x, y, z) = get_art_data(&conn, &cookies, false);
@@ -226,50 +226,21 @@ fn whoneed(item: String, conn: Conn, cookies: Cookies) -> Template {
 // Routes for saving form data
 #[post("/fossil", data = "<data>")]
 fn fsave(conn: Conn, cookies: Cookies, data: Form<EditForm>) -> Redirect {
-    // Parse the jsonified owned/extra strings
-    let o: BTreeMap<i32, bool> = serde_json::from_str(&data.oj).unwrap();
-    let mut e: BTreeMap<i32, i32> = serde_json::from_str(&data.xj).unwrap();
-
-    // Delete from 'e' wherever 'o' has false
-    for (idx, stat) in &o {
-        if *stat == true { continue; }
-        let _ = e.remove(idx);
-    }
-    // Retrieve the user record and owned fossil records
-    let user = jamie_please(&conn, &cookies);
-    let owned = Ownedfossil::load(&*conn, user.id);
-    let mut newfossils: Vec<NewOwnedfossil> = Vec::new();
-    let mut updates: Vec<(i32, i32)> = Vec::new();
-
-    for (id, cnt) in e {
-        if let Some(existing) = owned.iter().find(|e| e.item_id == id) {
-            // Check for updates, push into updates vec if needed
-            if existing.extra == cnt { continue; }
-            else {
-                updates.push((existing.id, cnt));
-            }
-        } else {
-            // Generate NewOwnedFossil and push into vec
-            let nof = NewOwnedfossil {
-                user_id: user.id,
-                item_id: id,
-                extra: cnt };
-            newfossils.push(nof);
-        }
-    }
-
-    // Send to database
-    NewOwnedfossil::batch_create(&*conn, newfossils);
-    Ownedfossil::update(&*conn, updates);
-
+    save_fossils(&conn, &cookies, (data.oj.to_string(), data.xj.to_string()));
     Redirect::to("/edit/fossil")
 }
 
-#[post("/recipe")]
-fn rsave() {}
+#[post("/recipe", data = "<data>")]
+fn rsave(conn: Conn, cookies: Cookies, data: Form<EditForm>) -> Redirect {
+    save_recipes(&conn, &cookies, (data.oj.to_string(), data.xj.to_string()));
+    Redirect::to("/edit/recipe")
+}
 
-#[post("/art")]
-fn asave() {}
+#[post("/art", data = "<data>")]
+fn asave(conn: Conn, cookies: Cookies, data: Form<EditForm>) -> Redirect {
+    save_art(&conn, &cookies, (data.oj.to_string(), data.xj.to_string()));
+    Redirect::to("/edit/art")
+}
 
 // LAUNCH DAT THING
 fn rocket() -> rocket::Rocket {
@@ -359,4 +330,119 @@ fn get_art_data(conn: &Conn, cookies: &Cookies, all: bool)
        false => { Ownedart::load(&*conn, user.id) }
    };
    (user, items, owned)
+}
+
+// Data saving functions
+fn save_fossils(conn: &Conn, cookies: &Cookies, data: (String, String) ) {
+    // Parse the jsonified data
+    let o: BTreeMap<i32, bool> = serde_json::from_str(&data.0).unwrap();
+    let mut e: BTreeMap<i32, i32> = serde_json::from_str(&data.1).unwrap();
+
+    // Delete from 'e' wherever 'o' has false
+    for (idx, stat) in &o {
+        if *stat == true { continue; }
+        let _ = e.remove(idx);
+    }
+    // Retrieve the user record and owned fossil records
+    let user = jamie_please(&conn, &cookies);
+    let owned = Ownedfossil::load(&*conn, user.id);
+    let mut newfossils: Vec<NewOwnedfossil> = Vec::new();
+    let mut updates: Vec<(i32, i32)> = Vec::new();
+
+    for (id, cnt) in e {
+        if let Some(existing) = owned.iter().find(|e| e.item_id == id) {
+            // Check for updates, push into updates vec if needed
+            if existing.extra == cnt { continue; }
+            else {
+                updates.push((existing.id, cnt));
+            }
+        } else {
+            // Generate NewOwnedFossil and push into vec
+            let nof = NewOwnedfossil {
+                user_id: user.id,
+                item_id: id,
+                extra: cnt };
+            newfossils.push(nof);
+        }
+    }
+
+    // Send to database
+    NewOwnedfossil::batch_create(&*conn, newfossils);
+    Ownedfossil::update(&*conn, updates);
+}
+
+fn save_recipes(conn: &Conn, cookies: &Cookies, data: (String, String)) {
+    // Parse the jsonified data
+    let o: BTreeMap<i32, bool> = serde_json::from_str(&data.0).unwrap();
+    let mut e: BTreeMap<i32, i32> = serde_json::from_str(&data.1).unwrap();
+
+    // Delete from 'e' wherever 'o' has false
+    for (idx, stat) in &o {
+        if *stat == true { continue; }
+        let _ = e.remove(idx);
+    }
+    // Retrieve the user record and owned recipe records
+    let user = jamie_please(&conn, &cookies);
+    let owned = Ownedrecipe::load(&*conn, user.id);
+    let mut newrecipes: Vec<NewOwnedrecipe> = Vec::new();
+    let mut updates: Vec<(i32, i32)> = Vec::new();
+
+    for (id, cnt) in e {
+        if let Some(existing) = owned.iter().find(|e| e.item_id == id) {
+            // Check for updates, push into updates vec if needed
+            if existing.extra == cnt { continue; }
+            else {
+                updates.push((existing.id, cnt));
+            }
+        } else {
+            // Generate NewOwnedrecipe and push into vec
+            let nor = NewOwnedrecipe {
+                user_id: user.id,
+                item_id: id,
+                extra: cnt };
+            newrecipes.push(nor);
+        }
+    }
+
+    // Send to database
+    NewOwnedrecipe::batch_create(&*conn, newrecipes);
+    Ownedrecipe::update(&*conn, updates);
+}
+
+fn save_art(conn: &Conn, cookies: &Cookies, data: (String, String)) {
+    // Parse the jsonified data
+    let o: BTreeMap<i32, bool> = serde_json::from_str(&data.0).unwrap();
+    let mut e: BTreeMap<i32, i32> = serde_json::from_str(&data.1).unwrap();
+
+    // Delete from 'e' wherever 'o' has false
+    for (idx, stat) in &o {
+        if *stat == true { continue; }
+        let _ = e.remove(idx);
+    }
+    // Retrieve the user record and owned fossil records
+    let user = jamie_please(&conn, &cookies);
+    let owned = Ownedart::load(&*conn, user.id);
+    let mut newart: Vec<NewOwnedart> = Vec::new();
+    let mut updates: Vec<(i32, i32)> = Vec::new();
+
+    for (id, cnt) in e {
+        if let Some(existing) = owned.iter().find(|e| e.item_id == id) {
+            // Check for updates, push into updates vec if needed
+            if existing.extra == cnt { continue; }
+            else {
+                updates.push((existing.id, cnt));
+            }
+        } else {
+            // Generate NewOwnedart and push into vec
+            let noa = NewOwnedart {
+                user_id: user.id,
+                item_id: id,
+                extra: cnt };
+            newart.push(noa);
+        }
+    }
+
+    // Send to database
+    NewOwnedart::batch_create(&*conn, newart);
+    Ownedart::update(&*conn, updates);
 }

@@ -28,6 +28,7 @@ div.row {
     <div class="row">
         <div class="panel panel-info">
             <div class="panel-heading">
+            <form action="/save/recipe" method="POST" onsubmit='return ftoj(this)'>
               {% if user.alias == "None" %}
                 <h1 class="panel-title">User {{user.username}}'s Recipes
               {% else %}
@@ -37,7 +38,6 @@ div.row {
               </h1>
             </div>
             <div class="panel-body" id="metadata" style="display: block;">
-            <form action="/save/recipe" method="POST" onsubmit='return ftoj(this)'>
               <input type="hidden" id="oj" name="oj" value=""/>
               <input type="hidden" id="xj" name="xj" value=""/>
               {# Loop once to set up the tab bar #}
@@ -64,31 +64,40 @@ div.row {
                     </div>
                     <div class="panel-body">
                       <div class="row">
-                        <div class="col-md-2"><h3>Got it?</h3></div>
-                        <div class="col-md-2"><h3>Extras?</h3></div>
-                        <div class="col-md-8"><h3>Item Name</h3></div>
+                        <div class="col-md-1"><b>Got it?</b></div>
+                        <div class="col-md-1"><b>Extras?</b></div>
+                        <div class="col-md-3"><b>Item Name</b></div>
+                        <div class="col-md-2">&nbsp;</div>
+                        <div class="col-md-1"><b>Got it?</b></div>
+                        <div class="col-md-1"><b>Extras?</b></div>
+                        <div class="col-md-3"><b>Item Name</b></div>
                       </div>
-                      {% for item in rec %}
                       <div class="row">
+                      {% for item in rec %}
                         {% set oitem = owned | filter(attribute="item_id", value=item.id) | first %}
                         {% if oitem is string %}
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                           <input type="checkbox" value="{{item.id}}" name="owned">
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                           <input type="text" size="2" id="{{item.id}}" name="extra" value="0"/>
                         </div>
                         {% else %}
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                           <input type="checkbox" value="{{item.id}}" name="owned" checked>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                           <input type="text" size="2" name="extra" id="{{item.id}}" value="{{oitem.extra}}"/>
                         </div>
                         {% endif %}
-                        <div class="col-md-8"><h4>{{item.name}}</h4></div>
-                      </div>
+                        <div class="col-md-3"><h4>{{item.name}}</h4></div>
+                        {% if loop.index is even %}
+                          </div><div class="row">
+                        {% else %}
+                          <div class="col-md-2">&nbsp;</div>
+                        {% endif %}
                       {% endfor %}
+                      </div>
                     </div>
                   </div>
                 </div>
