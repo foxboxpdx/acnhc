@@ -28,7 +28,9 @@ impl Item for Fossil {
 
     fn load(conn: &SqliteConnection) -> Vec<Fossil> {
         use schema::fossils::dsl::*;
-        fossils.load::<Fossil>(conn).expect("Error loading fossils")
+        fossils
+            .order(name.asc())
+            .load::<Fossil>(conn).expect("Error loading fossils")
     }
 
     fn count(conn: &SqliteConnection) -> i64 {
@@ -48,7 +50,9 @@ impl Item for Recipe {
 
     fn load(conn: &SqliteConnection) -> Vec<Recipe> {
         use schema::recipes::dsl::*;
-        recipes.load::<Recipe>(conn).expect("error loading recipes")
+        recipes
+            .order(name.asc())
+            .load::<Recipe>(conn).expect("error loading recipes")
     }
 
     fn count(conn: &SqliteConnection) -> i64 {
@@ -68,7 +72,9 @@ impl Item for Art {
 
     fn load(conn: &SqliteConnection) -> Vec<Art> {
         use schema::arts::dsl::*;
-        arts.load::<Art>(conn).expect("Error loading art")
+        arts
+            .order(name.asc())
+            .load::<Art>(conn).expect("Error loading art")
     }
 
     fn count(conn: &SqliteConnection) -> i64 {
