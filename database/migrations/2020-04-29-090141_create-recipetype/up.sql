@@ -1,4 +1,4 @@
 CREATE TABLE recipetypes (
-        id integer not null primary key autoincrement,
+        id serial not null primary key,
         name varchar(30) not null
 )

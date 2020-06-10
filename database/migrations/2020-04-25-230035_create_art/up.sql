@@ -1,5 +1,5 @@
 CREATE TABLE arts (
-        id integer not null primary key autoincrement,
+        id serial not null primary key,
         name varchar(75) not null
 )
 
