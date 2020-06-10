@@ -2,4 +2,4 @@
 address = "0.0.0.0"
 
 [global.databases]
-sqlite_db = { url = "../database.db" }
+pg_db = { url = "postgres://username:password@localhost/acnhc" }

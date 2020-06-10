@@ -22,8 +22,8 @@ use uuid::Uuid;
 // Form and Context structs are stored in lib.rs
 
 // Hello database
-#[database("sqlite_db")]
-struct Conn(diesel::SqliteConnection);
+#[database("pg_db")]
+struct Conn(diesel::PgConnection);
 
 
 // Root path routes
