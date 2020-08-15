@@ -1,0 +1,15 @@
+[package]
+name = "acnhc-wasm"
+version = "0.1.0"
+authors = ["Fox Box <foxboxpdx@gmail.com>"]
+edition = "2018"
+description = "ACNH Catalog app using rust-wasm"
+license = "Apache 2.0"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+yew = "0.17"
+wasm-bindgen = "0.2"
+
