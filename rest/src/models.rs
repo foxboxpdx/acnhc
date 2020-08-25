@@ -3,7 +3,7 @@ use super::schema::*;
 
 // Items - a more-or-less 'static' table containing data about the various kinds of 
 // collectable items in the game.
-#[derive(Queryable)]
+#[derive(Identifiable, Queryable, AsChangeset, Serialize)]
 pub struct Item {
     pub id: i32,
     pub name_en: String,
@@ -14,8 +14,8 @@ pub struct Item {
 
 // OwnedItems - The big table.  Contains one entry for each of a given user's
 // collected items.
-#[derive(Queryable)]
-pub struct OwnedItem {
+#[derive(Identifiable, Queryable, AsChangeset, Serialize)]
+pub struct Owneditem {
     pub id: i32,
     pub user_id: i32,
     pub item_id: i32,
@@ -23,7 +23,7 @@ pub struct OwnedItem {
 }
 
 // Users - Pretty self explanitory
-#[derive(Queryable)]
+#[derive(Identifiable, Queryable, AsChangeset, Serialize)]
 pub struct User {
     pub id: i32,
     pub username: String,
@@ -33,16 +33,16 @@ pub struct User {
 
 // PrimaryTypes - Define the primary 'type' of a given Item, ie fossil,
 // recipe, fish, bug, etc.
-#[derive(Queryable)]
-pub struct PrimaryType {
+#[derive(Identifiable, Queryable, AsChangeset, Serialize)]
+pub struct Primarytype {
     pub id: i32,
     pub name: String
 }
 
 // SubTypes - Define any sort of 'subtype' that may exist for a primary type,
 // ie for recipes, what kind of recipe
-#[derive(Queryable)]
-pub struct SubType {
+#[derive(Identifiable, Queryable, AsChangeset, Serialize)]
+pub struct Subtype {
     pub id: i32,
     pub name: String
 }
@@ -61,7 +61,7 @@ pub struct NewItem<'a> {
 
 #[derive(Insertable)]
 #[table_name="owneditems"]
-pub struct NewOwnedItem {
+pub struct NewOwneditem {
     pub user_id: i32,
     pub item_id: i32,
     pub extra: i32
@@ -76,13 +76,13 @@ pub struct NewUser<'a> {
 
 #[derive(Insertable)]
 #[table_name="primarytypes"]
-pub struct NewPrimaryType<'a> {
+pub struct NewPrimarytype<'a> {
     pub name: &'a str
 }
 
 #[derive(Insertable)]
 #[table_name="subtypes"]
-pub struct NewSubType<'a> {
+pub struct NewSubtype<'a> {
     pub name: &'a str 
 }
 
