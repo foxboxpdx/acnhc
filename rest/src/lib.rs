@@ -49,6 +49,7 @@ impl Item {
      }
 
     // Bonus function to get a count based on pri/sub types
+    // need to add a couple filter lines in there
     fn count(conn: &SqliteConnection, pt: i32, st: i32) -> i64 {
         use schema::items::dsl::*;
         let c = items.count().get_result(conn);
