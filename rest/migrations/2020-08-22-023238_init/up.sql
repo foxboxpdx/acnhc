@@ -17,6 +17,7 @@ CREATE TABLE users (
     id integer not null primary key autoincrement,
     username varchar(50) not null,
     passwd varchar(100) not null,
+    token varchar(50) not null default '0',
     seen varchar(20) not null default '0'
 );
 CREATE TABLE primarytypes (
