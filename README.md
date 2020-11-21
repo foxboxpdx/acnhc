@@ -8,7 +8,5 @@ It's meant to be instanced per community; ie Discord servers with a lot of
 people who play the game and want a nice centralized way to share their 
 extra items.
 
-Currently under a big rewrite with the database portion and web portions 
-separated into different crates.  Database is currently focused on Sqlite3 
-via Diesel, and Web is using Rocket (and therefore rust-nightly).
+This branch is for a major rewrite to use Rust-Yew to make a WASM front end, while keeping a Rocket+Diesel Rest API backend.
 
