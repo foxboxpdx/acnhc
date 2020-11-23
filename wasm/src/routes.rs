@@ -4,40 +4,10 @@ use yew_router::prelude::*;
 pub enum Route {
     #[to = "/about"]
     About,
-    #[to = "/artwork"]
-    Artwork,
-    #[to = "/deepsea"]
-    DeepSea,
-    #[to = "/equipment"]
-    Equipment,
-    #[to = "/fish"]
-    Fish,
-    #[to = "/floors"]
-    Floors,
-    #[to = "/fossils"]
-    Fossils,
-    #[to = "/housewares"]
-    Housewares,
-    #[to = "/insects"]
-    Insects,
+    #[to = "/catalog/{u}/{p}/{s}"]
+    Catalog(i32, i32, i32),
     #[to = "/login"]
     Login,
-    #[to = "/miscellaneous"]
-    Miscellaneous,
-    #[to = "/music"]
-    Music,
-    #[to = "/other"]
-    Other,
-    #[to = "/recipes"]
-    Recipes,
-    #[to = "/rugs"]
-    Rugs,
-    #[to = "/tools"]
-    Tools,
-    #[to = "/wallmounted"]
-    WallMounted,
-    #[to = "/wallpaper"]
-    Wallpaper,
     #[to = "/"]
     Home
 }

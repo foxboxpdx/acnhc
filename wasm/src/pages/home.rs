@@ -51,6 +51,19 @@ impl Component for Home {
     }
 
     fn view(&self) -> Html {
-        html! { "Hello" }
+        let title = format!("Welcome to ACNHC2");
+        html! {
+            <div class="mainbody">
+                <SideBar/>
+                <div class="title_and_content">
+                    <div class="titlebar">
+                        <div class="titlebar_text">{title}</div>
+                    </div>
+                    <div class="content">
+                        {"Hello!"}
+                    </div>
+                </div>
+            </div>
+        }
     }
 }
